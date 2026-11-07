@@ -1074,11 +1074,10 @@ function vParent(){
      <button class="btn" data-act="saveSettings">Lưu cài đặt</button></div>
     ${S.resetAsk?`<div class="confirm">Xoá hết sao, tiến độ, bạn cú và sticker?<div class="row2"><button class="btn sec2" data-act="resetNo">Không xoá</button><button class="btn red" data-act="resetYes">Xoá hết</button></div></div>`:`<button class="btn sec2" data-act="resetAsk">Xoá dữ liệu học tập</button>`}`;
   }else{
-    body=`<div class="card" style="display:flex;flex-direction:column;gap:10px;align-items:flex-start"><h3>Liên hệ hỗ trợ</h3><p class="sub" style="font-size:15px">Cần góp ý nội dung bài học hoặc báo lỗi, phụ huynh vui lòng gọi hoặc nhắn Zalo:</p><span class="phone" id="phone">0399.703.103</span><button class="btn" data-act="copyPhone">Sao chép số</button></div>
-    <div class="card"><h3>Về ứng dụng</h3><p class="sub" style="font-size:14px">Nội dung bám theo SGK Toán 1–5 bộ <b>Kết nối tri thức với cuộc sống</b>, bộ sách dùng thống nhất toàn quốc từ năm học 2026–2027 (Quyết định 3588/QĐ-BGDĐT), theo chương trình GDPT 2018. Tiến độ học lưu trên trình duyệt của máy này.</p></div>`;
+    body=`<div class="card"><h3>Về ứng dụng</h3><p class="sub" style="font-size:14px">Nội dung bám theo SGK Toán 1–5 bộ <b>Kết nối tri thức với cuộc sống</b>, bộ sách dùng thống nhất toàn quốc từ năm học 2026–2027 (Quyết định 3588/QĐ-BGDĐT), theo chương trình GDPT 2018. Tiến độ học lưu trên trình duyệt của máy này.</p></div>`;
   }
   return vTop()+`<div class="main"><h1 class="ptitle">Phụ huynh<small>${esc(data.name)} · Lớp ${data.grade}</small></h1>
-  <div class="seg" role="tablist">${[['prog','Tiến độ'],['set','Cài đặt'],['help','Liên hệ']].map(([k,l])=>`<button class="${S.ptab===k?'on':''}" data-act="ptab" data-arg="${k}" role="tab" aria-selected="${S.ptab===k}">${l}</button>`).join('')}</div>${body}</div>`;
+  <div class="seg" role="tablist">${[['prog','Tiến độ'],['set','Cài đặt'],['help','Giới thiệu']].map(([k,l])=>`<button class="${S.ptab===k?'on':''}" data-act="ptab" data-arg="${k}" role="tab" aria-selected="${S.ptab===k}">${l}</button>`).join('')}</div>${body}</div>`;
 }
 function vTabs(){
   const T=[['hoc','Học',I.book],['arena','Đấu trường',I.sword],['sticker','Sticker',I.owl],['parent','Phụ huynh',I.user]];
@@ -1300,7 +1299,6 @@ function onAct(act,arg,el){
     if(!ok){document.querySelectorAll('#bopts .opt').forEach((b,k)=>{if(q.o[k]===q.a)b.classList.add('ok')})}
     setTimeout(()=>{if(S.quiz!==Z)return;Z.lock=false;Z.i=(Z.i+1)%Z.qs.length;render()},ok?280:700);break}
   case 'saveSettings':data.name=document.getElementById('sName').value.trim()||'Bé';data.grade=+document.getElementById('sGrade').value;data.exam={name:document.getElementById('sExam').value.trim(),date:document.getElementById('sDate').value};save();render();toast('Đã lưu cài đặt');break;
-  case 'copyPhone':{const num='0399703103',ok=()=>toast('Đã sao chép số 0399.703.103'),fb=()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('phone'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Đã chọn số, bấm giữ để sao chép')};try{navigator.clipboard.writeText(num).then(ok,fb)}catch(e){fb()}break}
   case 'resetAsk':S.resetAsk=true;render();break;
   case 'resetNo':S.resetAsk=false;render();break;
   case 'resetYes':{const th=data.theme;data=clone(DEF);data.theme=th;save();S.resetAsk=false;S.tab='hoc';S.ptab='prog';render();toast('Đã xoá dữ liệu');break}

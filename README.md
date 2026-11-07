@@ -10,5 +10,3 @@
 - Trang phụ huynh: thống kê, cài đặt kỳ thi
 
 Toàn bộ ứng dụng nằm trong một file `index.html`, không cần cài đặt hay build. Tiến độ học lưu trong trình duyệt (localStorage).
-
-Hỗ trợ: 0399.703.103
