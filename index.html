@@ -102,7 +102,7 @@ svg{display:block}
 .mbar i{display:block;height:100%;background:var(--star);border-radius:11px;transition:width .4s}
 .meal b{font-family:var(--f-ui);font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;font-size:14px}
 .meal small{color:var(--muted);font-size:12px;font-weight:700;white-space:nowrap}
-.acts{flex:none;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;align-self:stretch}
+.acts{flex:none;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;align-self:stretch}
 .acts button{position:relative;background:var(--card);border-radius:999px;padding:6px 4px;font-family:var(--f-ui);font-weight:700;font-size:14px;box-shadow:var(--shadow);white-space:nowrap}
 .acts .dot{position:absolute;top:3px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--flame)}
 
@@ -867,6 +867,7 @@ const KEY='toan-cu-v2';
 const DEF={name:'Bé',grade:1,pet:'Cú Bông',stars:0,earned:0,prog:{},meals:0,stage:0,days:[],daily:{},spin:'',owned:[],wear:{},buddy:'nau',buddies:['nau'],stickers:[],resume:null,exam:{name:'',date:''},bestBlitz:0,bestExam:null,quizzes:0,exams:0,perfect:0,theme:''};
 const clone=o=>JSON.parse(JSON.stringify(o));
 let data;try{data=Object.assign(clone(DEF),JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){data=clone(DEF)}
+data.wear={};data.owned=[];
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
 const ds=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const today=()=>ds(new Date());
@@ -901,8 +902,8 @@ const STK=[
   ['sieutoc','🚀','Siêu tốc','Đúng 20 câu trong 60 giây',d=>d.bestBlitz>=20],
   ['thithu','📝','Sĩ tử','Hoàn thành một đề luyện thi',d=>d.exams>=1],
   ['mayman','🎡','May mắn','Quay vòng quay lần đầu',d=>!!d.spin],
-  ['suutam','🎩','Nhà sưu tầm','Mua 3 món ở cửa hàng',d=>d.owned.length>=3],
-  ['banmoi','🐧','Bạn mới','Mở khoá thêm một bạn đồng hành',d=>d.buddies.length>=2],
+  ['tuan','📅','Cả tuần','Học đủ 5 ngày',d=>d.days.length>=5],
+  ['banmoi','🐧','Bạn mới','Chọn thêm một bạn cú đồng hành',d=>d.buddies.length>=2],
   ['siengnang','✏️','Siêng năng','Hoàn thành 20 bài luyện',d=>d.quizzes>=20],
   ['chude','📚','Chinh phục','Đạt 3 sao mọi bài của một chủ đề',d=>GRADES.some(G=>G.chap.some(c=>c.tp.every(t=>(d.prog[t.id]||0)>=3)))],
   ['lon','🦉','Cú trưởng thành','Nuôi bạn cú lớn hết cỡ',d=>d.stage>=3],
@@ -1013,7 +1014,7 @@ function vHero(){
   <button class="pet" id="pet" data-act="pet" aria-label="Chạm vào ${esc(data.pet)}">${mascot()}</button>
   <div class="petrow"><button class="pname" data-act="rename" aria-label="Đổi tên bạn cú">${esc(data.pet)} ${I.pencil}</button><span class="stage">${STAGE[data.stage]} · ${data.stage}/3</span></div>
   <div class="meal"><div class="mbar"><i style="width:${Math.min(100,data.meals/need*100)}%"></i></div><b>${data.meals}/${need} bữa</b><small>đạt 80% = 1 bữa</small></div>
-  <div class="acts"><button data-act="shop">Cửa hàng</button><button data-act="buddy">Đổi bạn</button><button data-act="spin" aria-label="Vòng quay${canSpin?', có lượt quay hôm nay':''}">Vòng quay${canSpin?'<i class="dot"></i>':''}</button></div></section>`;
+  <div class="acts"><button data-act="buddy">Đổi bạn</button><button data-act="spin" aria-label="Vòng quay${canSpin?', có lượt quay hôm nay':''}">Vòng quay${canSpin?'<i class="dot"></i>':''}</button></div></section>`;
 }
 const tile=(cls,act,arg,ic,t,s)=>`<button class="tile ${cls}" data-act="${act}" ${arg?`data-arg="${arg}"`:''}><span class="ti">${ic}</span><b>${t}</b><small>${s}</small></button>`;
 function vHoc(){
@@ -1216,14 +1217,8 @@ function vSheet(){
     <div class="fld"><label>Chọn lớp</label><div class="gpick">${[1,2,3,4,5].map(n=>`<button class="${n===(S.pg||data.grade)?'on':''}" style="--gc:var(${GRADES[n-1].c})" data-act="pGrade" data-arg="${n}" aria-label="Lớp ${n}">${n}</button>`).join('')}</div></div>
     <button class="btn" data-act="saveProfile">Lưu</button>`);
   if(s==='rename')return wrap('Đặt tên bạn cú',`<div class="prev">${mascot()}</div><div class="fld"><label for="petName">Tên bạn cú</label><input id="petName" maxlength="16" value="${esc(data.pet)}"></div><button class="btn" data-act="savePet">Lưu tên</button>`);
-  if(s==='shop'){
-    const egg=data.stage===0;
-    return wrap('Cửa hàng',`<div class="prev">${mascot({stage:Math.max(2,data.stage)})}</div>
-    <p style="margin:0;color:var(--muted);font-weight:600">Bạn đang có <b style="color:var(--ink)">${data.stars} ★</b>. ${egg?'Đồ sẽ hiện lên khi bạn cú nở. ':''}Khăn quàng chỉ thấy khi cú đã ra khỏi vỏ trứng.</p>
-    <div class="items">${SHOP.map(it=>{const own=data.owned.includes(it.id),on=data.wear[it.slot]===it.id;return `<div class="item"><span class="ic">${itemIcon(it.id)}</span><span>${it.name}<small>${own?'Đã có':it.price+' ★'}</small></span>${own?`<button class="${on?'on':''}" data-act="wear" data-arg="${it.id}">${on?'Tháo ra':'Đeo vào'}</button>`:`<button data-act="buy" data-arg="${it.id}" ${data.stars<it.price?'disabled':''}>Mua</button>`}</div>`}).join('')}</div>`);
-  }
-  if(s==='buddy')return wrap('Đổi bạn đồng hành',`<p style="margin:0;color:var(--muted);font-weight:600">Bạn đang có <b style="color:var(--ink)">${data.stars} ★</b>. Đổi bạn thì độ lớn và đồ đeo vẫn giữ nguyên.</p>
-    <div class="buds">${Object.entries(BUD).map(([k,b])=>{const own=data.buddies.includes(k),on=data.buddy===k;return `<button class="bud ${on?'on':''}" data-act="pickBud" data-arg="${k}" ${!own&&data.stars<b.price?'disabled':''}>${mascot({stage:Math.max(2,data.stage),buddy:k,wear:{}})}<b>${b.name}</b><small>${on?'Đang đồng hành':own?'Chọn bạn này':`Mở khoá: ${b.price} ★`}</small></button>`}).join('')}</div>`);
+  if(s==='buddy')return wrap('Đổi bạn đồng hành',`<p style="margin:0;color:var(--muted);font-weight:600">Chọn bạn cú đồng hành cùng bé. Đổi bạn thì cú vẫn giữ nguyên độ lớn.</p>
+    <div class="buds">${Object.entries(BUD).map(([k,b])=>{const own=data.buddies.includes(k),on=data.buddy===k;return `<button class="bud ${on?'on':''}" data-act="pickBud" data-arg="${k}">${mascot({stage:Math.max(2,data.stage),buddy:k,wear:{}})}<b>${b.name}</b><small>${on?'Đang đồng hành':'Chọn bạn này'}</small></button>`}).join('')}</div>`);
   if(s==='spin'){
     const can=data.spin!==today(),cols=['#ffb020','#cfe5dd','#f0654d','#e3efea','#ffb020','#cfe5dd','#f0654d','#e3efea'];
     let seg='';PRIZES.forEach((p,i)=>{const a0=(i*45-90-22.5)*Math.PI/180,a1=((i+1)*45-90-22.5)*Math.PI/180,am=(i*45-90)*Math.PI/180;
@@ -1266,10 +1261,8 @@ function onAct(act,arg,el){
   case 'rename':S.sheet='rename';render();break;
   case 'savePet':data.pet=document.getElementById('petName').value.trim()||'Cú Bông';S.sheet=null;save();render();break;
   case 'close':S.sheet=null;render();break;
-  case 'shop':case 'buddy':case 'spin':S.sheet=act;render();break;
-  case 'buy':{const it=SHOP.find(x=>x.id===arg);if(data.stars<it.price)return;data.stars-=it.price;data.owned.push(it.id);data.wear[it.slot]=it.id;const n=checkStk();save();render();toast(`Đã mua ${it.name}`+(n.length?` · Sticker mới: ${n[0][2]}`:''));break}
-  case 'wear':{const it=SHOP.find(x=>x.id===arg);if(data.wear[it.slot]===it.id)delete data.wear[it.slot];else data.wear[it.slot]=it.id;save();render();break}
-  case 'pickBud':{const b=BUD[arg];if(!data.buddies.includes(arg)){if(data.stars<b.price)return;data.stars-=b.price;data.buddies.push(arg)}data.buddy=arg;const n=checkStk();save();render();toast(`${b.name} đang đồng hành cùng ${data.name}`+(n.length?` · Sticker mới: ${n[0][2]}`:''));break}
+  case 'buddy':case 'spin':S.sheet=act;render();break;
+  case 'pickBud':{const b=BUD[arg];if(!data.buddies.includes(arg))data.buddies.push(arg);data.buddy=arg;const n=checkStk();save();render();toast(`${b.name} đang đồng hành cùng ${data.name}`+(n.length?` · Sticker mới: ${n[0][2]}`:''));break}
   case 'doSpin':{if(data.spin===today())return;const k=R(0,7),base=Math.ceil((S.wrot||0)/360)*360;S.wrot=base+360*5+(360-k*45);data.spin=today();
     const w=document.getElementById('wheel');el.disabled=true;w.style.transform=`rotate(${S.wrot}deg)`;
     const p=PRIZES[k];let msg;const rr={bonus:0};if(p==='meal'){feed(rr);msg=`Trúng 1 bữa cho ${data.pet}!`+(rr.evolved?` ${data.pet} đã lớn lên!`:'')}else{data.stars+=p;data.earned+=p;msg=`Trúng ${p} ★!`}
