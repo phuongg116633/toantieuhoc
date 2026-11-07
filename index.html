@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Luyện Toán tiểu học lớp 1–5 theo chương trình GDPT 2018">
+<meta name="description" content="Luyện Toán lớp 1–5 theo SGK Kết nối tri thức, bộ sách dùng thống nhất toàn quốc">
 <meta name="theme-color" content="#fbf7ef">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Toán Tiểu Học 1–5</title>
@@ -523,7 +523,7 @@ function rectSvg(a,b,u='cm'){
   return `<svg class="rect" viewBox="0 0 240 150" role="img" aria-label="Hình"><rect x="${x}" y="${y}" width="${W}" height="${H}" class="rf"/><text x="120" y="${y+H+18}" text-anchor="middle">${a} ${u}</text><text x="${x-6}" y="${y+H/2+4}" text-anchor="end">${b} ${u}</text></svg>`;
 }
 
-/* ===================== NGÂN HÀNG CÂU HỎI (theo CT GDPT 2018) ===================== */
+/* ===================== NGÂN HÀNG CÂU HỎI (CT GDPT 2018, SGK Kết nối tri thức dùng thống nhất toàn quốc) ===================== */
 const OBJ=[['🍎','quả táo'],['⭐','ngôi sao'],['🐟','con cá'],['🌸','bông hoa'],['🎈','quả bóng bay'],['🐥','chú gà con'],['🍌','quả chuối']];
 const WD=['thứ Hai','thứ Ba','thứ Tư','thứ Năm','thứ Sáu','thứ Bảy','Chủ nhật'];
 const lbl=(h,m)=>m?`${h} giờ ${m} phút`:`${h} giờ`;
@@ -1075,7 +1075,7 @@ function vParent(){
     ${S.resetAsk?`<div class="confirm">Xoá hết sao, tiến độ, bạn cú và sticker?<div class="row2"><button class="btn sec2" data-act="resetNo">Không xoá</button><button class="btn red" data-act="resetYes">Xoá hết</button></div></div>`:`<button class="btn sec2" data-act="resetAsk">Xoá dữ liệu học tập</button>`}`;
   }else{
     body=`<div class="card" style="display:flex;flex-direction:column;gap:10px;align-items:flex-start"><h3>Liên hệ hỗ trợ</h3><p class="sub" style="font-size:15px">Cần góp ý nội dung bài học hoặc báo lỗi, phụ huynh vui lòng gọi hoặc nhắn Zalo:</p><span class="phone" id="phone">0399.703.103</span><button class="btn" data-act="copyPhone">Sao chép số</button></div>
-    <div class="card"><h3>Về ứng dụng</h3><p class="sub" style="font-size:14px">Nội dung bám theo mạch kiến thức SGK Toán 1–5, chương trình GDPT 2018. Tiến độ học lưu trên trình duyệt của máy này.</p></div>`;
+    <div class="card"><h3>Về ứng dụng</h3><p class="sub" style="font-size:14px">Nội dung bám theo SGK Toán 1–5 bộ <b>Kết nối tri thức với cuộc sống</b>, bộ sách dùng thống nhất toàn quốc từ năm học 2026–2027 (Quyết định 3588/QĐ-BGDĐT), theo chương trình GDPT 2018. Tiến độ học lưu trên trình duyệt của máy này.</p></div>`;
   }
   return vTop()+`<div class="main"><h1 class="ptitle">Phụ huynh<small>${esc(data.name)} · Lớp ${data.grade}</small></h1>
   <div class="seg" role="tablist">${[['prog','Tiến độ'],['set','Cài đặt'],['help','Liên hệ']].map(([k,l])=>`<button class="${S.ptab===k?'on':''}" data-act="ptab" data-arg="${k}" role="tab" aria-selected="${S.ptab===k}">${l}</button>`).join('')}</div>${body}</div>`;

@@ -1,6 +1,6 @@
 # Toán Tiểu Học 1–5
 
-Ứng dụng web luyện Toán lớp 1–5 theo chương trình GDPT 2018 (Bộ GD&ĐT), giao diện cỡ điện thoại.
+Ứng dụng web luyện Toán lớp 1–5, giao diện cỡ điện thoại. Nội dung bám theo SGK Toán bộ **Kết nối tri thức với cuộc sống**, bộ sách dùng thống nhất toàn quốc từ năm học 2026–2027 (Quyết định 3588/QĐ-BGDĐT ngày 26/12/2025), theo chương trình GDPT 2018.
 
 - Lộ trình theo từng chủ đề SGK, có phần Ghi nhớ và ví dụ
 - Câu hỏi tạo ngẫu nhiên, có lời giải từng bước
