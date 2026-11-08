@@ -429,6 +429,34 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .brandmark svg{width:40px;height:40px;flex:none}
 .brandmark b{font-family:var(--f-ui);font-size:24px;font-weight:700;letter-spacing:-.02em}
 .mark-ring{stroke:var(--ink)}.mark-planet{fill:var(--brand)}
+/* ---- Hiệu ứng đúng sai ---- */
+@keyframes popOk{0%{transform:scale(1)}35%{transform:scale(1.08)}65%{transform:scale(.97)}100%{transform:scale(1)}}
+@keyframes shakeX{0%,100%{transform:translateX(0)}15%{transform:translateX(-10px)}30%{transform:translateX(9px)}45%{transform:translateX(-7px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+.opt.ok.fx{animation:popOk .45s ease}
+.opt.bad.fx,.sol.fxbad{animation:shakeX .5s ease}
+.fbi{width:40px;height:40px;flex:none;border-radius:50%;display:grid;place-items:center;animation:popIn .45s cubic-bezier(.2,1.6,.4,1)}
+.fbs.ok .fbi{background:var(--ok);color:var(--on-brand)}
+.fbs.bad .fbi{background:var(--bad);color:#fff}
+.fbi svg{width:24px;height:24px}
+.fbi path{stroke-dasharray:32;stroke-dashoffset:32;animation:draw .35s .2s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes popIn{0%{transform:scale(0)}100%{transform:scale(1)}}
+.fbh .owl{width:58px;flex:none;margin:-14px 0 -6px}
+.fbs.ok .owl svg{animation:hopOwl .7s .15s ease}
+.fbs.bad .owl svg{animation:tiltOwl .7s .15s ease;transform-origin:50% 90%}
+@keyframes hopOwl{0%,100%{transform:none}35%{transform:translateY(-12px)}60%{transform:translateY(0)}75%{transform:translateY(-4px)}}
+@keyframes tiltOwl{0%,100%{transform:none}25%{transform:rotate(-9deg)}55%{transform:rotate(7deg)}80%{transform:rotate(-3deg)}}
+.fbs{animation:sheetUp .32s cubic-bezier(.2,1.2,.4,1)}
+@keyframes sheetUp{from{transform:translateY(100%)}}
+.plus{position:fixed;z-index:60;pointer-events:none;font:800 22px var(--f-ui);color:var(--brand);text-shadow:0 2px 0 var(--card);animation:floatUp 1s ease-out forwards}
+@keyframes floatUp{0%{opacity:0;transform:translate(-50%,0) scale(.7)}20%{opacity:1;transform:translate(-50%,-14px) scale(1.15)}100%{opacity:0;transform:translate(-50%,-80px) scale(1)}}
+.combo{position:absolute;left:50%;top:58px;z-index:20;background:var(--sun);color:#10242b;font:800 16px var(--f-ui);padding:6px 16px;border-radius:999px;animation:comboIn 1.8s ease forwards;pointer-events:none;white-space:nowrap;box-shadow:var(--shadow)}
+@keyframes comboIn{0%{opacity:0;transform:translate(-50%,12px) scale(.6)}15%{opacity:1;transform:translate(-50%,0) scale(1.12)}25%{transform:translate(-50%,0) scale(1)}80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-12px)}}
+.prog i.glow{animation:glow .7s ease}
+@keyframes glow{40%{filter:brightness(1.35);box-shadow:0 0 0 4px color-mix(in srgb,var(--brand) 30%,transparent)}}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:55}
+.tgl{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.tgl input{width:20px;height:20px;accent-color:var(--brand)}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -475,6 +503,7 @@ function fq(q,n,d,cands,e,v=''){
   let k=1;while(o.length<3){const vv=(n*k+d)/(d*k);const x=n+k,y=d+ (k%2);const w=x/y;if(!seen.some(s=>Math.abs(s-w)<1e-9)){seen.push(w);o.push(fs(x,y))}k++}
   return {q,a,o:shuf([a,...o]),e,v};
 }
+function rawF(q,[an,ad],cands,e){const a=`${an}/${ad}`,seen=[an/ad],o=[];for(const [x,y] of cands){const w=x/y;if(!(x>0&&y>0)||seen.some(v=>Math.abs(v-w)<1e-9))continue;seen.push(w);o.push(`${x}/${y}`)}let t=1;while(o.length<3){const w=(an+t)/ad;if(!seen.some(v=>Math.abs(v-w)<1e-9)){seen.push(w);o.push(`${an+t}/${ad}`)}t++}return ch(q,a,o,e)}
 const D=['không','một','hai','ba','bốn','năm','sáu','bảy','tám','chín'];
 function triad(n,full){
   const h=Math.floor(n/100),t=Math.floor(n/10)%10,u=n%10,w=[];
@@ -720,7 +749,7 @@ const GRADES=[
      const [p,q,r,s,P,Q]=ad>c?[a,b,c,d,ad,c]:[c,d,a,b,c,ad];
      return fq(E(`${p}/${q} − ${r}/${s}`),P-Q,d,[[Math.abs(p-r),Math.abs(q-s)||1],[P-Q+1,d],[P+Q,d],[Math.abs(p-r),d]],b===d?`Cùng mẫu: ${P} − ${Q} = ${P-Q}, được ${P-Q}/${d} = ${fs(P-Q,d)}.`:`Quy đồng mẫu số ${d}: ${P}/${d} − ${Q}/${d} = ${P-Q}/${d} = ${fs(P-Q,d)}.`)}},
   {id:'4i',t:'Nhân, chia phân số',note:'Nhân: tử nhân tử, mẫu nhân mẫu. Chia: nhân phân số thứ nhất với phân số thứ hai đảo ngược.',
-   g:()=>{const b=R(2,9),d=R(2,9),a=R(1,b+1),c=R(1,d+1);
+   g:()=>{let a,b,c,d;do{b=R(2,9);d=R(2,9);a=R(1,b+1);c=R(1,d+1)}while(a===b||c===d);
      if(R(0,1))return fq(E(`${a}/${b} × ${c}/${d}`),a*c,b*d,[[a*d,b*c],[a+c,b+d],[a*c,b+d],[a*c+1,b*d]],`Tử nhân tử: ${a} × ${c} = ${a*c}; mẫu nhân mẫu: ${b} × ${d} = ${b*d}. Được ${a*c}/${b*d} = ${fs(a*c,b*d)}.`);
      return fq(E(`${a}/${b} : ${c}/${d}`),a*d,b*c,[[a*c,b*d],[b*c,a*d],[a*d+1,b*c],[a+d,b+c]],`Đảo ngược phân số thứ hai rồi nhân: ${a}/${b} × ${d}/${c} = ${a*d}/${b*c} = ${fs(a*d,b*c)}.`)}}
  ]}
@@ -730,8 +759,8 @@ const GRADES=[
   {id:'5a',t:'Hỗn số và phân số thập phân',note:'Hỗn số 2 1/3 = (2 × 3 + 1)/3 = 7/3. Phân số thập phân có mẫu số là 10, 100, 1000…',
    g:()=>{let a,b;do{b=R(2,9);a=R(1,b-1)}while(gcd(a,b)!==1);const w=R(1,4);
      if(R(0,1))return fq(`Chuyển hỗn số ${w} ${a}/${b} thành phân số:`,w*b+a,b,[[w*a+b,b],[w+a,b],[w*b+a,w*b],[w*b-a,b]],`Lấy phần nguyên nhân mẫu số rồi cộng tử số: ${w} × ${b} + ${a} = ${w*b+a}, giữ nguyên mẫu ${b}. Được ${w*b+a}/${b}.`);
-     const [m,k]=pick([[2,5],[4,25],[5,2],[20,5],[25,4]]);const n=R(1,m-1);if(gcd(n,m)!==1)return fq(`Phân số 1/${m} viết thành phân số thập phân là:`,k,m*k,[[k+1,m*k],[1,m*10]],`1/${m} = ${k}/${m*k}.`);
-     return fq(`Phân số ${n}/${m} bằng phân số nào dưới đây?`,n*k,m*k,[[n*k+1,m*k],[n,m*k],[n+k,m+k]],`Nhân cả tử và mẫu với ${k}: ${n}/${m} = ${n*k}/${m*k}.`)}}
+     const [m,k]=pick([[2,5],[4,25],[5,2],[20,5],[25,4]]);const n=R(1,m-1);if(gcd(n,m)!==1)return rawF(`Phân số 1/${m} viết thành phân số thập phân là:`,[k,m*k],[[k+1,m*k],[1,m*10],[k,m*10]],`Nhân cả tử và mẫu với ${k}: 1/${m} = ${k}/${m*k}.`);
+     return rawF(`Phân số ${n}/${m} bằng phân số thập phân nào dưới đây?`,[n*k,m*k],[[n*k+1,m*k],[n,m*k],[n+k,m+k],[n*k,m*k+1]],`Nhân cả tử và mẫu với ${k}: ${n}/${m} = ${n*k}/${m*k}.`)}}
  ]},
  {t:'Số thập phân',tp:[
   {id:'5b',t:'Đọc, viết, so sánh số thập phân',note:'Số thập phân gồm phần nguyên và phần thập phân, ngăn cách bởi dấu phẩy. So sánh phần nguyên trước, rồi lần lượt hàng phần mười, phần trăm, phần nghìn.',
@@ -860,11 +889,14 @@ const WORD={
   const v=R(12,30),w=R(2,5),x=R(0,1);return W(`Vận tốc của một chiếc thuyền khi nước lặng là ${v} km/giờ, vận tốc dòng nước là ${w} km/giờ. Hỏi vận tốc của thuyền khi ${x?'xuôi':'ngược'} dòng là bao nhiêu?`,[[`Vận tốc của thuyền khi ${x?'xuôi':'ngược'} dòng là:`,[v,x?'+':'−',w],'km/giờ']],'km/giờ','km/giờ',[x?v-w:v+w,v,v*w])}}]
 };
 GRADES.forEach(G=>G.chap.push({t:'Giải bài toán có lời văn',tp:WORD[G.n]}));
+/* Chặn câu hỏi mà đáp án đã nằm sẵn trong đề */
+const leak=q=>{const t=String(q.q).replace(/<[^>]+>/g,' ');return (t.match(/\d+\/\d+/g)||[]).includes(q.a)};
+GRADES.forEach(G=>G.chap.forEach(c=>c.tp.forEach(t=>{const g0=t.g;t.g=()=>{let q;for(let i=0;i<40;i++){q=g0();if(!leak(q))return q}return q}})));
 /*END*/
 /* ===================== DỮ LIỆU NGƯỜI HỌC ===================== */
 const TOP={},ALLT=[];GRADES.forEach(G=>G.chap.forEach((c,ci)=>c.tp.forEach(t=>{const o={...t,grade:G,ci,chap:c.t};TOP[t.id]=o;ALLT.push(o)})));
 const KEY='toan-cu-v2';
-const DEF={name:'Bé',grade:1,pet:'Cú Bông',stars:0,earned:0,prog:{},meals:0,stage:0,days:[],daily:{},spin:'',owned:[],wear:{},buddy:'nau',buddies:['nau'],stickers:[],resume:null,exam:{name:'',date:''},bestBlitz:0,bestExam:null,quizzes:0,exams:0,perfect:0,theme:''};
+const DEF={sound:true,name:'Bé',grade:1,pet:'Cú Bông',stars:0,earned:0,prog:{},meals:0,stage:0,days:[],daily:{},spin:'',owned:[],wear:{},buddy:'nau',buddies:['nau'],stickers:[],resume:null,exam:{name:'',date:''},bestBlitz:0,bestExam:null,quizzes:0,exams:0,perfect:0,theme:''};
 const clone=o=>JSON.parse(JSON.stringify(o));
 let data;try{data=Object.assign(clone(DEF),JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){data=clone(DEF)}
 data.wear={};data.owned=[];
@@ -1071,6 +1103,7 @@ function vParent(){
      <div class="row2"><div class="fld"><label for="sGrade">Lớp</label><select id="sGrade">${[1,2,3,4,5].map(n=>`<option value="${n}" ${n===data.grade?'selected':''}>Lớp ${n}</option>`).join('')}</select></div>
      <div class="fld"><label for="sDate">Ngày thi</label><input id="sDate" type="date" value="${data.exam.date}"></div></div>
      <div class="fld"><label for="sExam">Kỳ thi sắp tới</label><input id="sExam" maxlength="40" value="${esc(data.exam.name)}" placeholder="Ví dụ: Kangaroo, kiểm tra cuối kỳ"></div>
+     <label class="tgl"><input type="checkbox" id="sSound" ${data.sound!==false?'checked':''}> Âm thanh khi trả lời</label>
      <button class="btn" data-act="saveSettings">Lưu cài đặt</button></div>
     ${S.resetAsk?`<div class="confirm">Xoá hết sao, tiến độ, bạn cú và sticker?<div class="row2"><button class="btn sec2" data-act="resetNo">Không xoá</button><button class="btn red" data-act="resetYes">Xoá hết</button></div></div>`:`<button class="btn sec2" data-act="resetAsk">Xoá dữ liệu học tập</button>`}`;
   }else{
@@ -1112,9 +1145,9 @@ function vFill(q,fv){
   const F=q.fill,done=!!fv,m=fv?fv.mk:{},val=id=>fv?esc(fv.v[id]??''):'',dis=done?'disabled':'';
   if(!F.us){const o=[F.unit];for(const u of shuf(UNITS))if(o.length<4&&!o.includes(u))o.push(u);F.us=shuf(o)}
   const steps=F.S.map((st,si)=>`<div class="step"><div class="lg">${fr(st.lg)}</div><div class="calc">${st.t.map((x,ti)=>ti%2?`<button class="opb ${m['o'+si+'-'+ti]||''}" data-act="op" id="o${si}-${ti}" data-op="${fv?esc(fv.v['o'+si+'-'+ti]||''):''}" aria-label="Chọn phép tính" ${dis}>${fv?(fv.v['o'+si+'-'+ti]||'?'):'?'}</button>`:`<input class="nb ${m['n'+si+'-'+ti]||''}" id="n${si}-${ti}" style="${fw(x)}" inputmode="decimal" autocomplete="off" aria-label="Số thứ ${ti/2+1} của phép tính" value="${val('n'+si+'-'+ti)}" ${dis}>`).join('')}<span>=</span><input class="nb ${m['r'+si]||''}" id="r${si}" style="${fw(st.r)}" inputmode="decimal" autocomplete="off" aria-label="Kết quả" value="${val('r'+si)}" ${dis}><span class="u">(${st.u})</span></div></div>`).join('');
-  return `<div class="sol"><div class="solh">Bài giải</div>${steps}<div class="step"><div class="calc"><span>Đáp số:</span><input class="nb ${m.ans||''}" id="fans" style="${fw(F.ans)}" inputmode="decimal" autocomplete="off" aria-label="Đáp số" value="${val('fans')}" ${dis}><select class="usel ${m.unit||''}" id="funit" aria-label="Đơn vị" ${dis}><option value="">đơn vị…</option>${F.us.map(u=>`<option ${fv&&fv.v.funit===u?'selected':''}>${u}</option>`).join('')}</select></div></div></div>`;
+  return `<div class="sol${fv&&!fv.ok&&S.quiz.fxNow?' fxbad':''}"><div class="solh">Bài giải</div>${steps}<div class="step"><div class="calc"><span>Đáp số:</span><input class="nb ${m.ans||''}" id="fans" style="${fw(F.ans)}" inputmode="decimal" autocomplete="off" aria-label="Đáp số" value="${val('fans')}" ${dis}><select class="usel ${m.unit||''}" id="funit" aria-label="Đơn vị" ${dis}><option value="">đơn vị…</option>${F.us.map(u=>`<option ${fv&&fv.v.funit===u?'selected':''}>${u}</option>`).join('')}</select></div></div></div>`;
 }
-const fbSheet=(ok,title,body,next)=>`<div class="fbs ${ok?'ok':'bad'}" id="fbs" role="status"><div class="fbh"><b>${title}</b><button class="mini" data-act="fbToggle" id="fbt">Thu gọn</button></div><div class="fbb">${body}</div><button class="btn" data-act="next" id="nextBtn">${next}</button></div>`;
+const fbSheet=(ok,title,body,next)=>`<div class="fbs ${ok?'ok':'bad'}" id="fbs" role="status"><div class="fbh"><span class="fbi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">${ok?'<path d="M5 12.5l4.5 4.5L19 7.5"/>':'<path d="M7 7l10 10M17 7L7 17"/>'}</svg></span><b>${title}</b><span class="owl" aria-hidden="true">${mascot({stage:Math.max(2,data.stage),wear:{}})}</span><button class="mini" data-act="fbToggle" id="fbt">Thu gọn</button></div><div class="fbb">${body}</div><button class="btn" data-act="next" id="nextBtn">${next}</button></div>`;
 function vQuiz(){
   const Z=S.quiz,q=Z.qs[Z.i];
   const long=q.o.some(o=>String(o).replace(/<[^>]+>/g,'').length>13);
@@ -1141,7 +1174,7 @@ function vQuiz(){
     :`<div class="foot"><p class="hint">Bấm ô <b>?</b> để chọn dấu + − × :. Số thập phân viết dấu phẩy, ví dụ 2,5.</p><button class="btn" data-act="fcheck">Kiểm tra</button></div>`));
   }
   const done=Z.picked!==null,right=done&&q.o[Z.picked]===q.a;
-  return wrap(prog(done)+`<div class="main">${card()}<div class="opts${long?' one':''}">${q.o.map((o,k)=>{let c='';if(done){c=o===q.a?' ok':k===Z.picked?' bad':' dim'}return `<button class="opt${c}" data-act="ans" data-arg="${k}" ${done?'disabled':''}>${fr(o)}</button>`}).join('')}</div></div>`+
+  return wrap(prog(done)+`<div class="main">${card()}<div class="opts${long?' one':''}">${q.o.map((o,k)=>{let c='';if(done){c=o===q.a?' ok':k===Z.picked?' bad':' dim';if(Z.fxNow&&(o===q.a||k===Z.picked))c+=' fx'}return `<button class="opt${c}" data-act="ans" data-arg="${k}" ${done?'disabled':''}>${fr(o)}</button>`}).join('')}</div></div>`+
   (done?`<div class="foot" style="height:120px"></div>`+fbSheet(right,right?pick(['Chính xác!','Giỏi quá!','Tuyệt vời!','Đúng rồi!']):'Chưa đúng rồi',`${right?'':`<p>Đáp án đúng: <strong>${fr(q.a)}</strong></p>`}<p>${fr(q.e)}</p>`,nextLbl):'<div class="foot"></div>'));
 }
 function vResult(){
@@ -1205,7 +1238,7 @@ function finish(){
   if((Z.kind==='topic'||Z.kind==='fill')&&Z.arg){if(r.st===3&&(data.prog[Z.arg]||0)<3){data.stars+=5;data.earned+=5;r.bonus+=5}data.prog[Z.arg]=Math.max(data.prog[Z.arg]||0,r.st)}
   if(data.resume&&data.resume.id===Z.id)data.resume=null;
   r.newStk=checkStk();save();
-  S.res=r;S.view='result';S.quiz=null;render();
+  S.res=r;S.view='result';S.quiz=null;render();if(r.kind==='blitz'?r.record&&r.correct>0:r.st>=2){setTimeout(()=>{confetti(innerWidth/2,innerHeight*.3,90);snd('win')},250)}
 }
 /* ===================== BẢNG TRƯỢT ===================== */
 const PRIZES=[5,10,20,5,50,10,'meal',15];
@@ -1222,13 +1255,39 @@ function vSheet(){
     const can=data.spin!==today(),cols=['#ffb020','#cfe5dd','#f0654d','#e3efea','#ffb020','#cfe5dd','#f0654d','#e3efea'];
     let seg='';PRIZES.forEach((p,i)=>{const a0=(i*45-90-22.5)*Math.PI/180,a1=((i+1)*45-90-22.5)*Math.PI/180,am=(i*45-90)*Math.PI/180;
       seg+=`<path d="M150 150 L${150+140*Math.cos(a0)} ${150+140*Math.sin(a0)} A140 140 0 0 1 ${150+140*Math.cos(a1)} ${150+140*Math.sin(a1)}Z" fill="${cols[i]}" stroke="#fff" stroke-width="3"/><text x="${150+95*Math.cos(am)}" y="${150+95*Math.sin(am)+7}" text-anchor="middle" font-family="Bricolage Grotesque,Be Vietnam Pro,sans-serif" font-weight="800" font-size="${p==='meal'?17:22}" fill="#10242b" transform="rotate(${i*45} ${150+95*Math.cos(am)} ${150+95*Math.sin(am)})">${p==='meal'?'1 bữa':p+'★'}</text>`});
-    return wrap('Vòng quay may mắn',`<p style="margin:0;color:var(--muted);font-weight:600">Mỗi ngày được quay 1 lần miễn phí.</p>
+    return wrap('Vòng quay may mắn',`<p style="margin:0;color:var(--muted);font-weight:600">Mỗi ngày được quay 1 lần.</p>
     <div class="wheelw"><div class="ptr"></div><svg viewBox="0 0 300 300"><g class="wheel" id="wheel" style="transform:rotate(${S.wrot||0}deg)">${seg}</g><circle cx="150" cy="150" r="22" fill="var(--card)" stroke="#2c2a33" stroke-width="3"/></svg></div>
     <button class="btn" data-act="doSpin" id="spinBtn" ${can?'':'disabled'}>${can?'Quay ngay':'Hôm nay quay rồi, mai quay tiếp nhé'}</button>`);
   }
   return '';
 }
 
+
+/* ===================== HIỆU ỨNG ===================== */
+let AC=null;
+function snd(kind){
+  if(data.sound===false)return;
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();
+    const t=AC.currentTime,seq=kind===true?[[784,0,'sine',.16],[1175,.09,'sine',.16]]:kind==='win'?[[523,0,'sine',.14],[659,.1,'sine',.14],[784,.2,'sine',.14],[1047,.3,'sine',.16]]:[[196,0,'triangle',.18],[147,.13,'triangle',.18]];
+    for(const [f,dt,type,v] of seq){const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(f,t+dt);g.gain.setValueAtTime(0,t+dt);g.gain.linearRampToValueAtTime(v,t+dt+.012);g.gain.exponentialRampToValueAtTime(.0008,t+dt+(kind===false?.32:.38));o.connect(g);g.connect(AC.destination);o.start(t+dt);o.stop(t+dt+.45)}
+  }catch(e){}
+}
+const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+function confetti(x,y,count=40){
+  if(reduced())return;let c=document.getElementById('confetti');if(!c){c=document.createElement('canvas');c.id='confetti';document.body.appendChild(c)}
+  const dpr=devicePixelRatio||1,W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;const ctx=c.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);
+  const cols=['#0e7c7b','#ffb020','#f0654d','#3fbdb6','#cfe5dd'];
+  const P=Array.from({length:count},()=>{const a=-Math.PI/2+(Math.random()-.5)*2.2,v=5+Math.random()*7;return {x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:5+Math.random()*6,c:cols[Math.random()*cols.length|0],a:Math.random()*6,va:(Math.random()-.5)*.5,s:Math.random()<.6}});
+  let f=0;const N=75;(function tick(){ctx.clearRect(0,0,W,H);f++;for(const p of P){p.vy+=.32;p.vx*=.985;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.globalAlpha=Math.max(0,1-f/N);ctx.fillStyle=p.c;if(p.s)ctx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);else{ctx.beginPath();ctx.arc(0,0,p.r/2.6,0,7);ctx.fill()}ctx.restore()}if(f<N)requestAnimationFrame(tick);else ctx.clearRect(0,0,W,H)})();
+}
+function floatTxt(x,y,t){const d=document.createElement('div');d.className='plus';d.textContent=t;d.style.left=x+'px';d.style.top=y+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),1000)}
+function fx(ok,el,combo,light){
+  snd(!!ok);
+  if(!ok){try{navigator.vibrate&&navigator.vibrate(70)}catch(e){}return}
+  if(el){const r=el.getBoundingClientRect();if(!light)confetti(r.left+r.width/2,r.top+r.height/2);floatTxt(r.left+r.width/2,r.top-4,'+1 ★')}
+  const pb=document.querySelector('.prog i');if(pb){pb.classList.remove('glow');void pb.offsetWidth;pb.classList.add('glow')}
+  if(combo>=3&&!light||combo>=5&&combo%5===0){const d=document.createElement('div');d.className='combo';d.textContent=combo+' câu đúng liên tiếp!';app.appendChild(d);setTimeout(()=>d.remove(),1800)}
+}
 
 /* ===================== HIỂN THỊ ===================== */
 function render(){
@@ -1285,8 +1344,8 @@ function onAct(act,arg,el){
   case 'setGrade':data.grade=+arg;save();render();break;
   case 'fbToggle':{const b=document.getElementById('fbs'),t=document.getElementById('fbt');b.classList.toggle('min');t.textContent=b.classList.contains('min')?'Xem lời giải':'Thu gọn';break}
   case 'op':{const L=['+','−','×',':'],c=el.dataset.op,n=L[(L.indexOf(c)+1)%4];el.dataset.op=n;el.textContent=n;break}
-  case 'fcheck':{const Z=S.quiz,q=Z.qs[Z.i],res=gradeFill(q);Z.fv=res;Z.picked=0;if(res.ok)Z.score++;else Z.wrong.push({q,p:'Bài giải chưa đúng'});render();break}
-  case 'ans':{const Z=S.quiz;if(Z.picked!==null)return;Z.picked=+arg;const q=Z.qs[Z.i];if(q.o[Z.picked]===q.a)Z.score++;else Z.wrong.push({q,p:q.o[Z.picked]});render();break}
+  case 'fcheck':{const Z=S.quiz,q=Z.qs[Z.i],res=gradeFill(q);Z.fv=res;Z.picked=0;if(res.ok)Z.score++;else Z.wrong.push({q,p:'Bài giải chưa đúng'});Z.combo=res.ok?(Z.combo||0)+1:0;Z.fxNow=true;render();Z.fxNow=false;fx(res.ok,document.querySelector('#fbs .fbi'),Z.combo);break}
+  case 'ans':{const Z=S.quiz;if(Z.picked!==null)return;Z.picked=+arg;const q=Z.qs[Z.i];if(q.o[Z.picked]===q.a)Z.score++;else Z.wrong.push({q,p:q.o[Z.picked]});const ok=q.o[Z.picked]===q.a;Z.combo=ok?(Z.combo||0)+1:0;Z.fxNow=true;render();Z.fxNow=false;fx(ok,document.querySelectorAll('.opt')[Z.picked],Z.combo);break}
   case 'next':{const Z=S.quiz;if(Z.i<Z.qs.length-1){Z.i++;Z.picked=null;Z.fv=null;render()}else finish();break}
   case 'eAns':{const Z=S.quiz;Z.ans[Z.i]=Z.qs[Z.i].o[+arg];render();break}
   case 'eGo':S.quiz.i=+arg;S.confirm=false;render();break;
@@ -1295,10 +1354,10 @@ function onAct(act,arg,el){
   case 'eAsk':S.confirm=true;render();break;
   case 'eCancel':S.confirm=false;render();break;
   case 'eSubmit':finish();break;
-  case 'bAns':{const Z=S.quiz;if(Z.lock)return;const q=Z.qs[Z.i],ok=q.o[+arg]===q.a;Z.n++;if(ok)Z.score++;Z.lock=true;el.classList.add(ok?'ok':'bad');
+  case 'bAns':{const Z=S.quiz;if(Z.lock)return;const q=Z.qs[Z.i],ok=q.o[+arg]===q.a;Z.n++;if(ok)Z.score++;Z.lock=true;el.classList.add(ok?'ok':'bad','fx');Z.combo=ok?(Z.combo||0)+1:0;fx(ok,el,Z.combo,true);
     if(!ok){document.querySelectorAll('#bopts .opt').forEach((b,k)=>{if(q.o[k]===q.a)b.classList.add('ok')})}
     setTimeout(()=>{if(S.quiz!==Z)return;Z.lock=false;Z.i=(Z.i+1)%Z.qs.length;render()},ok?280:700);break}
-  case 'saveSettings':data.name=document.getElementById('sName').value.trim()||'Bé';data.grade=+document.getElementById('sGrade').value;data.exam={name:document.getElementById('sExam').value.trim(),date:document.getElementById('sDate').value};save();render();toast('Đã lưu cài đặt');break;
+  case 'saveSettings':data.name=document.getElementById('sName').value.trim()||'Bé';data.grade=+document.getElementById('sGrade').value;data.exam={name:document.getElementById('sExam').value.trim(),date:document.getElementById('sDate').value};data.sound=document.getElementById('sSound').checked;save();render();toast('Đã lưu cài đặt');break;
   case 'resetAsk':S.resetAsk=true;render();break;
   case 'resetNo':S.resetAsk=false;render();break;
   case 'resetYes':{const th=data.theme;data=clone(DEF);data.theme=th;save();S.resetAsk=false;S.tab='hoc';S.ptab='prog';render();toast('Đã xoá dữ liệu');break}
