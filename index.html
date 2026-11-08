@@ -457,6 +457,15 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 #confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:55}
 .tgl{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
 .tgl input{width:20px;height:20px;accent-color:var(--brand)}
+.sk{padding:0;background:none!important;overflow:hidden}
+.stk{grid-template-columns:repeat(4,1fr);gap:14px}
+.skd .ci{width:72px;height:72px}
+@media (max-height:720px){.stk{grid-template-columns:repeat(6,1fr);gap:8px}.skd .ci{width:60px;height:60px}}
+.sk svg,.skd .ci svg{width:100%;height:100%;display:block}
+.sk.off{filter:grayscale(1);opacity:.35}
+.sk.sel{border:3px solid var(--brand);border-radius:50%}
+.skd .ci{background:none!important;padding:0}
+.skd.off .ci{filter:grayscale(1);opacity:.45}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -922,25 +931,49 @@ const SHOP=[
   {id:'vm',slot:'head',name:'Vương miện',price:100}
 ];
 const STK=[
-  ['dau','🐣','Bước đầu tiên','Hoàn thành bài luyện đầu tiên',d=>d.quizzes>=1],
-  ['bason','⭐','Ba sao','Đạt 3 sao ở một bài',d=>Object.values(d.prog).some(v=>v>=3)],
-  ['diem10','🎯','Điểm 10','Làm đúng tất cả các câu',d=>d.perfect>=1],
-  ['nobe','🥚','Phá vỏ','Giúp bạn cú nở khỏi trứng',d=>d.stage>=1],
-  ['lua3','🔥','Chăm chỉ','Học 3 ngày liên tiếp',d=>streak(d)>=3],
-  ['lua7','🏅','Bền bỉ','Học 7 ngày liên tiếp',d=>streak(d)>=7],
-  ['tram','💯','Trăm sao','Thu được 100 sao',d=>d.earned>=100],
-  ['nghin','👑','Nghìn sao','Thu được 1000 sao',d=>d.earned>=1000],
-  ['chop','⚡','Tia chớp','Đúng 10 câu trong 60 giây',d=>d.bestBlitz>=10],
-  ['sieutoc','🚀','Siêu tốc','Đúng 20 câu trong 60 giây',d=>d.bestBlitz>=20],
-  ['thithu','📝','Sĩ tử','Hoàn thành một đề luyện thi',d=>d.exams>=1],
-  ['mayman','🎡','May mắn','Quay vòng quay lần đầu',d=>!!d.spin],
-  ['tuan','📅','Cả tuần','Học đủ 5 ngày',d=>d.days.length>=5],
-  ['banmoi','🐧','Bạn mới','Chọn thêm một bạn cú đồng hành',d=>d.buddies.length>=2],
-  ['siengnang','✏️','Siêng năng','Hoàn thành 20 bài luyện',d=>d.quizzes>=20],
-  ['chude','📚','Chinh phục','Đạt 3 sao mọi bài của một chủ đề',d=>GRADES.some(G=>G.chap.some(c=>c.tp.every(t=>(d.prog[t.id]||0)>=3)))],
-  ['lon','🦉','Cú trưởng thành','Nuôi bạn cú lớn hết cỡ',d=>d.stage>=3],
-  ['totnghiep','🎓','Tốt nghiệp','Đạt 3 sao mọi bài lớp 5',d=>GRADES[4].chap.every(c=>c.tp.every(t=>(d.prog[t.id]||0)>=3))]
+  ['dau','dau','Bước đầu tiên','Hoàn thành bài luyện đầu tiên',d=>d.quizzes>=1],
+  ['bason','bason','Ba sao','Đạt 3 sao ở một bài',d=>Object.values(d.prog).some(v=>v>=3)],
+  ['diem10','diem10','Điểm 10','Làm đúng tất cả các câu',d=>d.perfect>=1],
+  ['nobe','nobe','Phá vỏ','Giúp bạn cú nở khỏi trứng',d=>d.stage>=1],
+  ['lua3','lua3','Chăm chỉ','Học 3 ngày liên tiếp',d=>streak(d)>=3],
+  ['lua7','lua7','Bền bỉ','Học 7 ngày liên tiếp',d=>streak(d)>=7],
+  ['tram','tram','Trăm sao','Thu được 100 sao',d=>d.earned>=100],
+  ['nghin','nghin','Nghìn sao','Thu được 1000 sao',d=>d.earned>=1000],
+  ['chop','chop','Tia chớp','Đúng 10 câu trong 60 giây',d=>d.bestBlitz>=10],
+  ['sieutoc','sieutoc','Siêu tốc','Đúng 20 câu trong 60 giây',d=>d.bestBlitz>=20],
+  ['thithu','thithu','Sĩ tử','Hoàn thành một đề luyện thi',d=>d.exams>=1],
+  ['mayman','mayman','May mắn','Quay vòng quay lần đầu',d=>!!d.spin],
+  ['tuan','tuan','Cả tuần','Học đủ 5 ngày',d=>d.days.length>=5],
+  ['banmoi','banmoi','Bạn mới','Chọn thêm một bạn cú đồng hành',d=>d.buddies.length>=2],
+  ['siengnang','siengnang','Siêng năng','Hoàn thành 20 bài luyện',d=>d.quizzes>=20],
+  ['chude','chude','Chinh phục','Đạt 3 sao mọi bài của một chủ đề',d=>GRADES.some(G=>G.chap.some(c=>c.tp.every(t=>(d.prog[t.id]||0)>=3)))],
+  ['lon','lon','Cú trưởng thành','Nuôi bạn cú lớn hết cỡ',d=>d.stage>=3],
+  ['totnghiep','totnghiep','Tốt nghiệp','Đạt 3 sao mọi bài lớp 5',d=>GRADES[4].chap.every(c=>c.tp.every(t=>(d.prog[t.id]||0)>=3))]
 ];
+
+/* Huy hiệu sticker theo phong cách Orbit: nền màu thương hiệu, icon nét 2px, vòng quỹ đạo và vệ tinh san hô */
+const SKB={brand:['#0e7c7b','#ffffff'],sun:['#ffb020','#10242b'],coral:['#f0654d','#10242b'],mist:['#cfe5dd','#10242b'],ink:['#10242b','#fbf7ef'],tint:['#e3efea','#10242b']};
+const SKI={
+ dau:['mist','<path d="M6 21V4"/><path d="M6 4h11l-2.5 4L17 12H6"/>'],
+ bason:['sun','<path d="M12 3.5l1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6L6.8 7.3l3.6-.5z"/><path d="M5 15.5l.9 1.8 2 .3-1.4 1.4.3 2-1.8-.9-1.8.9.3-2-1.4-1.4 2-.3z"/><path d="M19 15.5l.9 1.8 2 .3-1.4 1.4.3 2-1.8-.9-1.8.9.3-2-1.4-1.4 2-.3z"/>'],
+ diem10:['coral','<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/>'],
+ nobe:['mist','<path d="M12 3c3.6 0 6.5 5 6.5 9.5S15.6 21 12 21s-6.5-3.5-6.5-8.5S8.4 3 12 3z"/><path d="M6 11.5l2.5 1.5 2-2 2 2.2 2-2 2 1.8 1.8-1"/>'],
+ lua3:['sun','<path d="M12 21.5c3.6 0 6-2.6 6-6 0-3.8-3-6-4-10-2 1.8-3 3.8-3 6-1-.8-1.8-1.8-2-3.2-1.8 2-3 4.4-3 7.2 0 3.4 2.4 6 6 6z"/>'],
+ lua7:['brand','<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><path d="M10 13h4l-2.5 5"/>'],
+ tram:['sun','<path d="M4.5 9.5l1.5-1v8"/><ellipse cx="11" cy="12.5" rx="2.4" ry="4"/><ellipse cx="17.6" cy="12.5" rx="2.4" ry="4"/><path d="M4 20h17"/>'],
+ nghin:['sun','<path d="M4 18l-1-10 5 4 4-6 4 6 5-4-1 10z"/><path d="M4.5 21h15"/>'],
+ chop:['mist','<path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/>'],
+ sieutoc:['coral','<path d="M14 4c3-1.5 5.5-1 6-.5.5.5 1 3-.5 6L13 16l-5-5z"/><path d="M8 11l-3.5.5L3 14l4 1M13 16l-.5 3.5L10 21l-1-4"/><circle cx="15.5" cy="8.5" r="1.6"/><path d="M5.5 18.5c-1 1-1.5 2.5-1.5 2.5s1.5-.5 2.5-1.5"/>'],
+ thithu:['mist','<path d="M6 2.5h8.5L19 7v14.5H6z"/><path d="M14 2.5V7h5"/><path d="M9 14l2.2 2.2L16 11.5"/>'],
+ mayman:['sun','<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17M6 6l12 12M18 6L6 18"/><circle cx="12" cy="12" r="2" fill="currentColor"/>'],
+ tuan:['mist','<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><path d="M8.5 15l2.3 2.3 4.7-4.6"/>'],
+ banmoi:['mist','<path d="M5 4.5l3 3h8l3-3v9a7 7 0 0 1-14 0z"/><circle cx="9.2" cy="12" r="2.1"/><circle cx="14.8" cy="12" r="2.1"/><path d="M11 15.5l1 1.3 1-1.3"/>'],
+ siengnang:['sun','<path d="M15.5 4.5l4 4L9 19H5v-4z"/><path d="M13 7l4 4"/>'],
+ chude:['brand','<path d="M3 5.5c3-1 6-1 9 1 3-2 6-2 9-1v13c-3-1-6-1-9 1-3-2-6-2-9-1z"/><path d="M12 6.5v13"/>'],
+ lon:['brand','<path d="M5.5 3.5l2.5 3h8l2.5-3V13a6.5 6.5 0 0 1-13 0z"/><circle cx="9.3" cy="10.5" r="2"/><circle cx="14.7" cy="10.5" r="2"/><path d="M11 14l1 1.3 1-1.3"/><path d="M8 21.5h8"/>'],
+ totnghiep:['ink','<path d="M2.5 9.5L12 5l9.5 4.5L12 14z"/><path d="M6.5 11.5v4c1.5 1.5 3.5 2.2 5.5 2.2s4-.7 5.5-2.2v-4"/><path d="M21.5 9.5v5"/>']};
+function stkSvg(id){const [bg,ic]=SKI[id]||SKI.dau,[b,f]=SKB[bg];
+ return `<svg viewBox="0 0 64 64" role="img" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="${b}"/><ellipse cx="32" cy="32" rx="29" ry="10" transform="rotate(-25 32 32)" fill="none" stroke="${f}" stroke-opacity=".22" stroke-width="1.5"/><g transform="translate(16.4 16.4) scale(1.3)" fill="none" stroke="${f}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" color="${f}">${ic}</g><circle cx="54.5" cy="17.5" r="3.6" fill="#f0654d" stroke="#fbf7ef" stroke-width="1.5"/></svg>`}
 function checkStk(){const nw=[];for(const s of STK)if(!data.stickers.includes(s[0])&&s[4](data)){data.stickers.push(s[0]);nw.push(s)}return nw}
 
 /* ===================== BIỂU TƯỢNG ===================== */
@@ -1084,8 +1117,8 @@ function vSticker(){
   if(!S.stk)S.stk=(STK.find(s=>data.stickers.includes(s[0]))||STK[0])[0];
   const cur=STK.find(s=>s[0]===S.stk),on=data.stickers.includes(cur[0]);
   return vTop()+`<div class="main"><h1 class="ptitle">Sticker<small>Đã có ${data.stickers.length}/${STK.length}</small></h1>
-  <div class="card skd ${on?'':'off'}"><span class="ci" aria-hidden="true">${cur[1]}</span><span><b>${cur[2]}</b><span class="sub">${on?'Đã mở khoá · ':'Chưa có · '}${cur[3]}</span></span></div>
-  <div class="card"><div class="stk">${STK.map(s=>`<button class="sk ${data.stickers.includes(s[0])?'':'off'} ${s[0]===S.stk?'sel':''}" data-act="stk" data-arg="${s[0]}" aria-label="${s[2]}">${s[1]}</button>`).join('')}</div></div>
+  <div class="card skd ${on?'':'off'}"><span class="ci" aria-hidden="true">${stkSvg(cur[0])}</span><span><b>${cur[2]}</b><span class="sub">${on?'Đã mở khoá · ':'Chưa có · '}${cur[3]}</span></span></div>
+  <div class="card"><div class="stk">${STK.map(s=>`<button class="sk ${data.stickers.includes(s[0])?'':'off'} ${s[0]===S.stk?'sel':''}" data-act="stk" data-arg="${s[0]}" aria-label="${s[2]}">${stkSvg(s[0])}</button>`).join('')}</div></div>
   <p class="sub" style="text-align:center">Chạm vào một sticker để xem cách mở khoá.</p></div>`;
 }
 function vParent(){
@@ -1183,7 +1216,7 @@ function vResult(){
   return `<div class="main" style="--gc:var(${r.c})"><section class="res"><div class="pet ${r.meal?'hop':''}">${mascot()}</div>
   ${r.kind==='blitz'?'':`<div class="bigst" aria-label="${r.st} sao">${'<i>★</i>'.repeat(r.st)}${'★'.repeat(3-r.st)}</div>`}
   <h2>${msg}</h2><div class="sc">${r.correct}<small>/${r.total}</small></div>
-  <div class="rewards"><span>+${r.correct+r.bonus} ★</span>${r.meal?`<span>+1 bữa cho ${esc(data.pet)}</span>`:''}${r.evolved?`<span>${esc(data.pet)} đã lớn: ${STAGE[data.stage]}!</span>`:''}${r.newStk.map(s=>`<span>Sticker mới: ${s[1]} ${s[2]}</span>`).join('')}</div>
+  <div class="rewards"><span>+${r.correct+r.bonus} ★</span>${r.meal?`<span>+1 bữa cho ${esc(data.pet)}</span>`:''}${r.evolved?`<span>${esc(data.pet)} đã lớn: ${STAGE[data.stage]}!</span>`:''}${r.newStk.map(s=>`<span>Sticker mới: ${s[2]}</span>`).join('')}</div>
   ${r.timeout?'<p class="sub">Hết giờ, bài đã được nộp tự động.</p>':''}
   ${!r.meal&&r.kind!=='blitz'?`<p class="sub">Đúng từ 80% để cho ${esc(data.pet)} ăn 1 bữa nhé.</p>`:''}</section></div>
   <div class="foot">${r.wrong.length?`<button class="btn sec2" data-act="review">Xem lại ${r.wrong.length} câu sai</button>`:''}<div class="row2"><button class="btn sec2" data-act="home">${toHoc?'Về trang Học':'Về Đấu trường'}</button><button class="btn" data-act="retry">Làm lại</button></div></div>`;
