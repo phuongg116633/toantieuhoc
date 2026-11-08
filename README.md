@@ -10,3 +10,9 @@
 - Trang phụ huynh: thống kê, cài đặt kỳ thi
 
 Toàn bộ ứng dụng nằm trong một file `index.html`, không cần cài đặt hay build. Tiến độ học lưu trong trình duyệt (localStorage).
+
+## Hướng dẫn sử dụng
+
+- Video hướng dẫn (dọc 9:16, có giọng đọc): [`huong-dan/video-huong-dan.mp4`](huong-dan/video-huong-dan.mp4)
+- Ảnh tổng hợp các bước: [`huong-dan/huong-dan-su-dung.png`](huong-dan/huong-dan-su-dung.png)
+- 4 ảnh 4:5 để đăng Facebook: [`huong-dan/facebook/`](huong-dan/facebook/)
