@@ -502,7 +502,9 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .colb .in.cur{border:2.5px solid var(--brand);background:var(--card);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 22%,transparent)}
 .colb .in.ok{border:2px solid var(--ok);background:var(--ok-bg);color:var(--ok)}
 .colb .in.bad{border:2px solid var(--bad);background:var(--bad-bg);color:var(--bad)}
-.colb .in.bad.fx{animation:shakeX .5s}
+.colb .in.bad.fx{animation:shakeX .45s}
+.colb .in.hint{border:2px solid var(--coral);background:color-mix(in srgb,var(--coral) 18%,var(--card));color:var(--ink)}
+.colb .in.ok.cur,.colb .in.bad.cur{box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 22%,transparent)}
 .colb .ky{border:1.5px dashed var(--line);border-radius:6px;color:var(--coral);font-size:.62em!important;margin:3px 6px 1px}
 .colb .ky.cur{border:2px solid var(--coral)}
 .colb .hl{position:absolute;height:2.5px;background:var(--ink);border-radius:2px}
@@ -1370,9 +1372,9 @@ function vQuiz(){
   if(Z.kind==='col'){
     if(!Z.cv)Z.cv={v:{},sel:q.col.order[0],main:q.col.order[0]};const cv=Z.cv,done=!!cv.mk;
     const head=`<div class="qcard sm" style="flex:none"><div class="qtag">${fr(Z.title)}</div><div class="qtext" style="font-size:22px;font-family:var(--f-ui)">${q.expr}</div></div>`;
-    if(!done)return wrap(prog(false)+`<div class="main">${head}${vColBoard(q,cv)}</div><div class="foot">${padHtml()}<button class="btn" data-act="ccheck">Kiểm tra</button></div>`);
-    const ttl=cv.ok?pick(['Chính xác!','Giỏi quá!','Tính rất chuẩn!']):'Còn ô chưa đúng';
-    const ex=`<div class="colex ${cv.ok?'ok':'bad'}" role="status"><div class="fbh"><span class="fbi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">${cv.ok?'<path d="M5 12.5l4.5 4.5L19 7.5"/>':'<path d="M7 7l10 10M17 7L7 17"/>'}</svg></span><b>${ttl}</b><span class="owl" aria-hidden="true">${mascot({stage:Math.max(2,data.stage),wear:{}})}</span></div>${cv.ok?'':`<p>Ô đỏ là chỗ cần sửa. Kết quả đúng: <strong>${q.a}</strong></p>`}<p>${q.e}</p></div>`;
+    if(!done)return wrap(prog(false)+`<div class="main">${head}${vColBoard(q,cv)}</div><div class="foot"><p class="hint" style="text-align:center">Gõ từng chữ số. Ô nào sai sẽ đỏ lên ngay để con tính lại ô đó.</p>${padHtml()}</div>`);
+    const ttl=cv.ok?pick(['Chính xác!','Giỏi quá!','Tính rất chuẩn!']):'Đã sửa xong';
+    const ex=`<div class="colex ${cv.ok?'ok':'bad'}" role="status"><div class="fbh"><span class="fbi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">${cv.ok?'<path d="M5 12.5l4.5 4.5L19 7.5"/>':'<path d="M7 7l10 10M17 7L7 17"/>'}</svg></span><b>${ttl}</b><span class="owl" aria-hidden="true">${mascot({stage:Math.max(2,data.stage),wear:{}})}</span></div>${cv.ok?'<p>Con làm đúng hết ngay từ lần đầu.</p>':`<p>Con đã gõ sai ${cv.err} lần trong bài này. Kết quả đúng: <strong>${q.a}</strong>. Đọc lại cách tính bên dưới nhé.</p>`}<p>${q.e}</p></div>`;
     return wrap(prog(true)+`<div class="main">${vColBoard(q,cv)}${ex}</div><div class="foot"><button class="btn" data-act="next" id="nextBtn">${nextLbl}</button></div>`);
   }
   if(Z.kind==='fill'){
@@ -1432,7 +1434,7 @@ function vColBoard(q,cv){
     if(c.t==='f')h+=`<span class="dc${c.cm?' cm':''}" style="${pos(c.c,c.r)}">${c.v}</span>`;
     else if(c.t==='s')h+=`<span class="dc sg" style="${pos(c.c,c.r)}">${c.v}</span>`;
     else if(c.t==='k')h+=`<button class="dc ky${cv.sel===c.id?' cur':''}" id="cc-${c.id}" data-act="csel" data-arg="${c.id}" style="${pos(c.c,c.r)}" aria-label="Ô nhớ" ${done?'disabled':''}>${cv.v[c.id]||''}</button>`;
-    else{const st=done?(cv.mk[c.id]||''):(cv.sel===c.id?'cur':'');h+=`<button class="dc in ${st}${done&&S.quiz.fxNow?' fx':''}${c.cm?' cm':''}" id="cc-${c.id}" data-act="csel" data-arg="${c.id}" style="${pos(c.c,c.r)}" aria-label="Ô kết quả" ${done?'disabled':''}>${cv.v[c.id]||''}</button>`}
+    else{const st=done?(cv.mk[c.id]||''):[cv.good&&cv.good[c.id]?(cv.hint&&cv.hint[c.id]?'hint':'ok'):'',cv.bad&&cv.bad[c.id]?'bad':'',cv.sel===c.id?'cur':''].join(' ');h+=`<button class="dc in ${st}${c.cm?' cm':''}" id="cc-${c.id}" data-act="csel" data-arg="${c.id}" style="${pos(c.c,c.r)}" aria-label="Ô kết quả" ${done?'disabled':''}>${cv.v[c.id]||''}</button>`}
   }
   for(const l of L.lines){if(l.h)h+=`<i class="hl" style="left:${l.c1*cw}px;width:${(l.c2-l.c1)*cw}px;top:${l.r*rh-1}px"></i>`;else h+=`<i class="vl" style="left:${l.c*cw-1}px;top:${l.r1*rh+2}px;height:${(l.r2-l.r1)*rh-4}px"></i>`}
   return `<div class="board"><div class="colb" style="width:${(L.cols*cw).toFixed(0)}px;height:${(L.rows*rh).toFixed(0)}px;background-size:${cw}px ${rh}px">${h}</div></div>`;
@@ -1440,13 +1442,32 @@ function vColBoard(q,cv){
 const padHtml=()=>`<div class="pad">${[1,2,3,4,5].map(n=>`<button data-act="ckey" data-arg="${n}">${n}</button>`).join('')}<button class="del" data-act="ckey" data-arg="del" aria-label="Xoá">⌫</button>${[6,7,8,9,0].map(n=>`<button data-act="ckey" data-arg="${n}">${n}</button>`).join('')}<button class="nav" data-act="ckey" data-arg="skip" aria-label="Sang ô tiếp theo">→</button></div>`;
 function colSel(id){const cv=S.quiz.cv,old=document.getElementById('cc-'+cv.sel);if(old)old.classList.remove('cur');cv.sel=id;const el=document.getElementById('cc-'+id);if(el)el.classList.add('cur')}
 function colKey(k){
-  const Z=S.quiz;if(!Z||Z.kind!=='col'||!Z.cv||Z.cv.mk)return;const cv=Z.cv,L=Z.qs[Z.i].col,ord=L.order,sel=cv.sel,isK=sel&&sel[0]==='k',i=ord.indexOf(sel);
-  const setV=(id,v)=>{if(v)cv.v[id]=v;else delete cv.v[id];const el=document.getElementById('cc-'+id);if(el)el.textContent=v||''};
-  if(k==='del'){if(cv.v[sel]){setV(sel,'')}else if(!isK&&i>0){colSel(ord[i-1]);setV(ord[i-1],'')}return}
-  if(k==='skip'){if(isK)colSel(cv.main||ord[0]);else if(i<ord.length-1)colSel(ord[i+1]);return}
-  setV(sel,String(k));
-  if(isK){colSel(cv.main||ord[0]);return}
-  if(i<ord.length-1){colSel(ord[i+1]);cv.main=ord[i+1]}
+  const Z=S.quiz;if(!Z||Z.kind!=='col'||!Z.cv||Z.cv.mk)return;
+  const cv=Z.cv,q=Z.qs[Z.i],L=q.col,ord=L.order,sel=cv.sel,isK=sel&&sel[0]==='k';
+  cv.good=cv.good||{};cv.miss=cv.miss||{};cv.err=cv.err||0;cv.hint=cv.hint||{};
+  const el=id=>document.getElementById('cc-'+id);
+  const setV=(id,v)=>{if(v)cv.v[id]=v;else delete cv.v[id];const e=el(id);if(e)e.textContent=v||''};
+  const nextOpen=()=>ord.find(id=>!cv.good[id]);
+  const go=()=>{const n=nextOpen();if(n){cv.main=n;colSel(n)}else finishCol()};
+  if(k==='skip'){if(isK){colSel(cv.main||nextOpen())}else{const i=ord.indexOf(sel),n=ord.slice(i+1).find(id=>!cv.good[id])||nextOpen();if(n)colSel(n)}return}
+  if(k==='del'){if(!cv.good[sel]){setV(sel,'');const e=el(sel);if(e)e.classList.remove('bad')}return}
+  if(isK){setV(sel,String(k));colSel(cv.main||nextOpen());return}
+  if(cv.good[sel])return;
+  const exp=L.cells.find(c=>c.id===sel).v,e=el(sel);
+  if(String(k)===exp){
+    setV(sel,exp);cv.good[sel]=1;delete cv.bad?.[sel];if(e){e.classList.remove('bad','fx');e.classList.add('ok')}
+    go();
+  }else{
+    cv.err++;cv.miss[sel]=(cv.miss[sel]||0)+1;setV(sel,String(k));cv.bad=cv.bad||{};cv.bad[sel]=1;
+    if(e){e.classList.remove('ok','fx');e.classList.add('bad');void e.offsetWidth;e.classList.add('fx')}
+    snd(false);try{navigator.vibrate&&navigator.vibrate(60)}catch(_){}
+    if(cv.miss[sel]>=3){setTimeout(()=>{if(S.quiz!==Z||Z.cv!==cv||cv.good[sel])return;setV(sel,exp);cv.good[sel]=1;cv.hint[sel]=1;delete cv.bad[sel];const e2=el(sel);if(e2){e2.classList.remove('bad','fx');e2.classList.add('hint')}toast('Số đúng ở ô này là '+exp+'. Con xem lại cách tính nhé');go()},550)}
+  }
+}
+function finishCol(){
+  const Z=S.quiz,q=Z.qs[Z.i],cv=Z.cv;cv.mk={};for(const c of q.col.cells)if(c.t==='i')cv.mk[c.id]=cv.hint&&cv.hint[c.id]?'hint':'ok';
+  cv.ok=!cv.err;Z.picked=0;if(cv.ok)Z.score++;else Z.wrong.push({q,p:`Gõ sai ${cv.err} lần`});
+  Z.combo=cv.ok?(Z.combo||0)+1:0;setTimeout(()=>{if(S.quiz!==Z)return;render();fx(cv.ok,document.querySelector('.colex .fbi'),Z.combo)},350);
 }
 function gradeCol(q,cv){const mk={};let ok=true;for(const c of q.col.cells)if(c.t==='i'){mk[c.id]=cv.v[c.id]===c.v?'ok':'bad';if(mk[c.id]==='bad')ok=false}return {mk,ok}}
 function makeQs(n,gen){const qs=[],seen=new Set();let k=0;while(qs.length<n&&k<n*20){k++;const [g,tag]=gen();const q=g();const key=q.q+'|'+q.a;if(seen.has(key)&&k<n*15)continue;seen.add(key);q.tag=tag;qs.push(q)}return qs}
@@ -1569,7 +1590,7 @@ function onAct(act,arg,el){
   case 'colhub':S.view='colhub';render();break;
   case 'hubGrade':data.grade=+arg;save();render();break;
   case 'colTopic':S.topic=arg;startQuiz('col',arg);break;
-  case 'csel':{const cv=S.quiz.cv;if(arg[0]!=='k')cv.main=arg;colSel(arg);break}
+  case 'csel':{const cv=S.quiz.cv;if(cv.good&&cv.good[arg])break;if(arg[0]!=='k')cv.main=arg;colSel(arg);break}
   case 'ckey':colKey(arg==='del'||arg==='skip'?arg:+arg);break;
   case 'ccheck':{const Z=S.quiz,q=Z.qs[Z.i],res=gradeCol(q,Z.cv);Object.assign(Z.cv,res);Z.picked=0;if(res.ok)Z.score++;else Z.wrong.push({q,p:'Đặt tính chưa đúng'});Z.combo=res.ok?(Z.combo||0)+1:0;Z.fxNow=true;render();Z.fxNow=false;fx(res.ok,document.querySelector('.colex .fbi'),Z.combo);break}
   case 'fillMix':startQuiz('fill');break;
