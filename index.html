@@ -76,7 +76,7 @@ svg{display:block}
 .ib svg{width:19px;height:19px}
 
 /* ---- Khung bầu trời ---- */
-.hero{flex:1 1 auto;min-height:250px;position:relative;overflow:hidden;border-radius:26px;background:linear-gradient(180deg,var(--sky1),var(--sky2) 75%);padding:10px 12px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;box-shadow:var(--shadow);isolation:isolate}
+.hero{flex:1 1 auto;min-height:200px;position:relative;overflow:hidden;border-radius:26px;background:linear-gradient(180deg,var(--sky1),var(--sky2) 75%);padding:10px 12px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;box-shadow:var(--shadow);isolation:isolate}
 .hero::after{content:"";position:absolute;left:-20%;right:-20%;bottom:-80px;height:150px;border-radius:50%;background:var(--grass);z-index:-1;box-shadow:0 -10px 0 var(--grass2) inset}
 .sun{position:absolute;right:-30px;top:28%;width:72px;height:72px;border-radius:50%;background:var(--sun);z-index:-1;box-shadow:0 0 0 9px color-mix(in srgb,var(--sun) 25%,transparent)}
 .cloud{position:absolute;background:var(--cloud);border-radius:999px;z-index:-1;opacity:.95}
@@ -466,6 +466,32 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .sk.sel{border:3px solid var(--brand);border-radius:50%}
 .skd .ci{background:none!important;padding:0}
 .skd.off .ci{filter:grayscale(1);opacity:.45}
+/* ---- Mục Đặt tính rồi tính ---- */
+.dtbig{flex:none;display:flex;align-items:center;gap:12px;text-align:left;background:var(--ink);color:var(--bg);border-radius:20px;padding:10px 14px}
+.dtbig:active{transform:translateY(2px)}
+.dtmini{flex:none;width:58px;height:58px;border-radius:14px;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;justify-content:center;align-items:flex-end;padding:0 9px;font:700 13px/1.15 var(--f-ui);font-variant-numeric:tabular-nums;position:relative}
+.dtmini b{font-weight:700;white-space:pre}.dtmini i{font-style:normal;color:var(--brand)}
+.dtmini u{display:block;width:34px;height:2px;background:var(--ink);margin:1px 0 2px;text-decoration:none}
+.dtmini .q{color:var(--coral)}
+.dtt{flex:1;min-width:0}.dtt b{display:block;font:800 19px/1.15 var(--f-ui)}.dtt small{display:block;font-size:12.5px;line-height:1.3;opacity:.85;font-weight:600}
+.dtgo{flex:none;font:800 26px var(--f-ui);color:var(--sun)}
+.dthub{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dtc{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:8px;row-gap:2px;align-items:center;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:8px 10px;min-height:58px}
+.dtc .op{grid-row:span 2}
+.dtc .st{font-size:11px;letter-spacing:0}
+.tiles .tile:nth-child(3):last-child{grid-column:1/-1}
+@media (max-height:700px){.dtc{min-height:52px;padding:6px 9px}.dtc span.t{font-size:13px}}
+.dtc:active{background:var(--chip)}
+.dtc .op{width:32px;height:32px;border-radius:999px;display:grid;place-items:center;font:800 20px var(--f-ui);background:var(--chip);color:var(--brand)}
+.dtc .op.o1{background:var(--brand);color:var(--on-brand)}.dtc .op.o2{background:var(--sun);color:#10242b}.dtc .op.o3{background:var(--mist);color:var(--ink)}.dtc .op.o4{background:var(--ink);color:var(--bg)}
+.dtc span.t{font-weight:700;font-size:13.5px;line-height:1.2}
+.dtc .row{display:flex;justify-content:space-between;align-items:center;width:100%;gap:6px}
+.colex{flex:0 1 auto;min-height:0;max-height:46%;overflow-y:auto;border-radius:20px;padding:12px 14px;border:2px solid;display:flex;flex-direction:column;gap:6px;animation:sheetUp .3s ease}
+.colex.ok{background:var(--ok-bg);border-color:var(--ok)}.colex.bad{background:var(--bad-bg);border-color:var(--bad)}
+.colex .fbh b{font-size:20px}.colex.ok .fbh b{color:var(--ok)}.colex.bad .fbh b{color:var(--bad)}
+.colex.ok .fbi{background:var(--ok);color:var(--on-brand)}.colex.bad .fbi{background:var(--bad);color:#fff}
+.colex.ok .owl svg{animation:hopOwl .7s .15s ease}.colex.bad .owl svg{animation:tiltOwl .7s .15s ease;transform-origin:50% 90%}
+.colex p{margin:0;font-size:14.5px;line-height:1.45}
 /* ---- Bảng đặt tính ---- */
 .board{flex:1 1 auto;min-height:0;background:var(--card);border-radius:24px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;padding:14px;overflow:auto}
 .colb{position:relative;flex:none;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-position:-1px -1px;border-radius:6px}
@@ -990,32 +1016,44 @@ function colQuestion(kind,A,Bv){
   const num=+C.res.replace(',','.'),D=decN(C.res),st=Math.pow(10,-D);
   const o=nq(`Đặt tính rồi tính:${E(expr)}`,num,C.ex,[num+10*st,num-10*st,num+st*100,num*10,num/10].filter(v=>v>0));o.col=C.L;o.expr=expr;return o;
 }
-const CN='Viết các chữ số cùng hàng thẳng cột với nhau. Cộng, trừ, nhân tính từ phải sang trái. Chia tính từ trái sang phải: chia, nhân, trừ rồi hạ chữ số tiếp theo.';
+const nd=k=>R(Math.pow(10,k-1),Math.pow(10,k)-1);
+const S_=n=>String(n);
+const cAdd=(a,b)=>colQuestion('+',S_(a),S_(b)),cSub=(a,b)=>colQuestion('−',S_(Math.max(a,b)),S_(Math.min(a,b))),cMul=(a,k)=>colQuestion('×',S_(a),k),cDiv=(N,d)=>colQuestion(':',N,d);
+const mul2=()=>R(1,9)*10+R(1,9);
+const divQ=(d,qMin,qMax)=>{const Q=R(qMin,qMax),r=R(0,1)?0:R(1,d-1);return cDiv(Q*d+r,d)};
+function decAS(op){for(;;){const A=frI(R(100,9999),2),Bv=frI(R(10,999),R(1,2));if(/0$/.test(A)||/0$/.test(Bv))continue;const x=+A.replace(',','.'),y=+Bv.replace(',','.');if(op==='−'&&x<=y)continue;const q=colQuestion(op,A,Bv);const rd=q.col.cells.filter(c=>c.id&&c.id[0]==='r');if(rd.length&&rd[rd.length-1].v==='0')continue;return q}}
+const NA='Viết các chữ số cùng hàng thẳng cột: đơn vị thẳng đơn vị, chục thẳng chục… Tính từ phải sang trái.';
+const NM='Viết thừa số thứ hai dưới thừa số thứ nhất, thẳng cột bên phải. Nhân lần lượt từ phải sang trái, cộng thêm số nhớ.';
+const ND='Chia từ trái sang phải. Mỗi lượt: chia, viết thương; nhân lại; trừ để được số dư; hạ chữ số tiếp theo. Số dư luôn bé hơn số chia.';
+const dt=(id,op,t,note,g)=>({id,c:1,op,t,note,g});
 const COL={
-1:[{id:'1t',c:1,t:'Đặt tính: cộng, trừ (không nhớ) trong phạm vi 100',note:'Viết số thứ hai dưới số thứ nhất sao cho đơn vị thẳng đơn vị, chục thẳng chục. Viết dấu + hoặc − ở bên trái, kẻ gạch ngang, rồi tính từ phải sang trái.',
-  g:()=>{if(R(0,1)){const [a,b]=ncAdd();return colQuestion('+',String(a),String(b))}const [a,b]=ncSub();return colQuestion('−',String(a),String(b))}}],
-2:[{id:'2t1',c:1,t:'Đặt tính: cộng, trừ có nhớ trong phạm vi 100',note:'Đơn vị thẳng đơn vị, chục thẳng chục. Cộng được 10 trở lên thì viết hàng đơn vị và nhớ 1 sang hàng chục. Trừ không được thì lấy thêm 10 rồi trừ, nhớ 1 sang hàng chục.',
-  g:()=>{let a,b;if(R(0,1)){do{a=R(11,89);b=R(11,89)}while(a%10+b%10<10||a+b>99);return colQuestion('+',String(a),String(b))}do{a=R(20,99);b=R(11,89)}while(a%10>=b%10||b>=a);return colQuestion('−',String(a),String(b))}},
- {id:'2t2',c:1,t:'Đặt tính: cộng, trừ trong phạm vi 1000',note:'Trăm thẳng trăm, chục thẳng chục, đơn vị thẳng đơn vị. Tính từ phải sang trái, nhớ đúng sang hàng bên trái.',
-  g:()=>{if(R(0,1)){const a=R(100,700),b=R(100,999-a);return colQuestion('+',String(a),String(b))}const a=R(300,999),b=R(100,a-50);return colQuestion('−',String(a),String(b))}}],
-3:[{id:'3t1',c:1,t:'Đặt tính: cộng, trừ trong phạm vi 100 000',note:CN,
-  g:()=>{if(R(0,1)){const a=R(1000,60000),b=R(1000,39999);return colQuestion('+',String(a),String(b))}const a=R(10000,99999),b=R(1000,a-1000);return colQuestion('−',String(a),String(b))}},
- {id:'3t2',c:1,t:'Đặt tính: nhân với số có một chữ số',note:'Viết thừa số có một chữ số thẳng cột với hàng đơn vị. Nhân từ phải sang trái, nhân xong mỗi hàng thì cộng thêm số nhớ.',
-  g:()=>{const k=R(2,9),a=R(12,Math.min(2999,Math.floor(9999/k)));return colQuestion('×',String(a),k)}},
- {id:'3t3',c:1,t:'Đặt tính: chia cho số có một chữ số',note:'Chia từ trái sang phải. Mỗi lượt: chia, viết thương; nhân lại; trừ để được số dư; hạ chữ số tiếp theo. Số dư luôn bé hơn số chia.',
-  g:()=>{const k=R(2,9),N=R(0,3)?R(Math.max(12,k*3),999):R(1000,9999);return colQuestion(':',N,k)}}],
-4:[{id:'4t1',c:1,t:'Đặt tính: cộng, trừ các số có nhiều chữ số',note:CN,
-  g:()=>{if(R(0,1)){const a=R(10000,599999),b=R(10000,399999);return colQuestion('+',String(a),String(b))}const a=R(100000,999999),b=R(10000,a-10000);return colQuestion('−',String(a),String(b))}},
- {id:'4t2',c:1,t:'Đặt tính: nhân với số có hai chữ số',note:'Nhân lần lượt với chữ số hàng đơn vị (tích riêng thứ nhất), rồi với chữ số hàng chục (tích riêng thứ hai viết lùi sang trái một cột). Cộng hai tích riêng.',
-  g:()=>{const a=R(100,999),k=R(1,9)*10+R(1,9);return colQuestion('×',String(a),k)}},
- {id:'4t3',c:1,t:'Đặt tính: chia cho số có hai chữ số',note:'Ước lượng thương ở mỗi lượt chia (có thể làm tròn số chia). Nhân lại, trừ để được số dư bé hơn số chia, rồi hạ chữ số tiếp theo.',
-  g:()=>{const d=R(11,49),Q=R(10,199),r=R(0,1)?0:R(1,d-1),N=Q*d+r;return colQuestion(':',N,d)}}],
-5:[{id:'5t1',c:1,t:'Đặt tính: cộng, trừ số thập phân',note:'Viết các số sao cho dấu phẩy thẳng cột với nhau. Tính như cộng, trừ số tự nhiên, rồi viết dấu phẩy ở kết quả thẳng cột với các dấu phẩy.',
-  g:()=>{for(;;){const A=frI(R(100,9999),2),Bv=frI(R(10,999),R(1,2));if(/0$/.test(A)||/0$/.test(Bv))continue;const x=+A.replace(',','.'),y=+Bv.replace(',','.'),op=R(0,1)?'+':'−',q=op==='+'?colQuestion('+',A,Bv):x>y?colQuestion('−',A,Bv):colQuestion('−',Bv,A);const rd=q.col.cells.filter(c=>c.id&&c.id[0]==='r');if(rd.length&&rd[rd.length-1].v==='0')continue;return q}}},
- {id:'5t2',c:1,t:'Đặt tính: nhân số thập phân với số tự nhiên',note:'Nhân như nhân số tự nhiên. Thừa số có bao nhiêu chữ số ở phần thập phân thì dùng dấu phẩy tách ra ở tích bấy nhiêu chữ số kể từ phải sang trái.',
-  g:()=>{let D,n,k;do{D=R(1,2);n=R(11,999);k=R(2,9)}while((n*k)%10===0||n%10===0);return colQuestion('×',frI(n,D),k)}},
- {id:'5t3',c:1,t:'Đặt tính: nhân, chia số tự nhiên (ôn tập)',note:CN,
-  g:()=>{if(R(0,1)){const a=R(100,999),k=R(1,9)*10+R(1,9);return colQuestion('×',String(a),k)}const d=R(11,59),Q=R(10,299),r=R(0,1)?0:R(1,d-1);return colQuestion(':',Q*d+r,d)}}]
+1:[dt('dt1a','+','Cộng không nhớ hai chữ số',NA,()=>{const [a,b]=ncAdd();return cAdd(a,b)}),
+   dt('dt1b','−','Trừ không nhớ hai chữ số',NA,()=>{const [a,b]=ncSub();return cSub(a,b)})],
+2:[dt('dt2a','+','Cộng có nhớ trong phạm vi 100',NA,()=>{let a,b;do{a=R(11,89);b=R(11,89)}while(a%10+b%10<10||a+b>99);return cAdd(a,b)}),
+   dt('dt2b','−','Trừ có nhớ trong phạm vi 100',NA,()=>{let a,b;do{a=R(20,99);b=R(11,89)}while(a%10>=b%10||b>=a);return cSub(a,b)}),
+   dt('dt2c','+','Cộng số có ba chữ số',NA,()=>{const a=R(100,700);return cAdd(a,R(100,999-a))}),
+   dt('dt2d','−','Trừ số có ba chữ số',NA,()=>{const a=R(300,999);return cSub(a,R(100,a-50))})],
+3:[dt('dt3a','+','Cộng số có bốn chữ số',NA,()=>{const a=R(1000,7999);return cAdd(a,R(1000,9999-a))}),
+   dt('dt3b','−','Trừ số có bốn chữ số',NA,()=>{const a=R(3000,9999);return cSub(a,R(1000,a-500))}),
+   dt('dt3c','+','Cộng số có năm chữ số',NA,()=>{const a=R(10000,79999);return cAdd(a,R(10000,99999-a))}),
+   dt('dt3d','−','Trừ số có năm chữ số',NA,()=>{const a=R(30000,99999);return cSub(a,R(10000,a-1000))}),
+   dt('dt3e','×','Nhân số có hai chữ số với số có một chữ số',NM,()=>cMul(nd(2),R(2,9))),
+   dt('dt3f','×','Nhân số có ba chữ số với số có một chữ số',NM,()=>cMul(nd(3),R(2,9))),
+   dt('dt3g','×','Nhân số có bốn chữ số với số có một chữ số',NM,()=>{const k=R(2,9);return cMul(R(1000,Math.floor(99999/k)),k)}),
+   dt('dt3h',':','Chia số có hai chữ số cho số có một chữ số',ND,()=>{const d=R(2,9);return cDiv(R(Math.max(10,d*2),99),d)}),
+   dt('dt3i',':','Chia số có ba chữ số cho số có một chữ số',ND,()=>cDiv(nd(3),R(2,9))),
+   dt('dt3j',':','Chia số có bốn chữ số cho số có một chữ số',ND,()=>cDiv(nd(4),R(2,9)))],
+4:[dt('dt4a','+','Cộng các số có nhiều chữ số',NA,()=>cAdd(R(10000,599999),R(10000,399999))),
+   dt('dt4b','−','Trừ các số có nhiều chữ số',NA,()=>{const a=R(100000,999999);return cSub(a,R(10000,a-10000))}),
+   dt('dt4c','×','Nhân với số có một chữ số',NM,()=>{const k=R(2,9);return cMul(R(1000,Math.floor(999999/k)),k)}),
+   dt('dt4d','×','Nhân với số có hai chữ số','Nhân với chữ số hàng đơn vị được tích riêng thứ nhất; nhân với chữ số hàng chục được tích riêng thứ hai, viết lùi sang trái một cột. Cộng hai tích riêng.',()=>cMul(nd(R(2,3)),mul2())),
+   dt('dt4e',':','Chia cho số có một chữ số',ND,()=>cDiv(R(1000,99999),R(2,9))),
+   dt('dt4f',':','Chia cho số có hai chữ số','Ước lượng thương ở mỗi lượt chia (có thể làm tròn số chia). Nhân lại, trừ để được số dư bé hơn số chia, rồi hạ chữ số tiếp theo.',()=>divQ(R(11,99),10,199))],
+5:[dt('dt5a','+','Cộng số thập phân','Viết các số sao cho dấu phẩy thẳng cột. Cộng như số tự nhiên, rồi viết dấu phẩy ở tổng thẳng cột với các dấu phẩy.',()=>decAS('+')),
+   dt('dt5b','−','Trừ số thập phân','Viết các số sao cho dấu phẩy thẳng cột. Trừ như số tự nhiên, rồi viết dấu phẩy ở hiệu thẳng cột với các dấu phẩy.',()=>decAS('−')),
+   dt('dt5c','×','Nhân số thập phân với số tự nhiên','Nhân như số tự nhiên. Thừa số có bao nhiêu chữ số ở phần thập phân thì tách ở tích bấy nhiêu chữ số kể từ phải sang trái.',()=>{let D,n,k;do{D=R(1,2);n=R(11,999);k=R(2,9)}while((n*k)%10===0||n%10===0);return colQuestion('×',frI(n,D),k)}),
+   dt('dt5d','×','Nhân với số có hai chữ số (ôn tập)',NM,()=>cMul(nd(3),mul2())),
+   dt('dt5e',':','Chia cho số có hai chữ số (ôn tập)',ND,()=>divQ(R(11,99),10,299))]
 };
 GRADES.forEach(G=>G.chap.push({t:'Đặt tính rồi tính',tp:COL[G.n]}));
 GRADES.forEach(G=>G.chap.push({t:'Giải bài toán có lời văn',tp:WORD[G.n]}));
@@ -1210,8 +1248,7 @@ function vHoc(){
   else T+=tile('mist','fillMix','',I.pencil,'Toán lời văn','Điền bài giải 5 bài');
   if(dd!==null&&data.exam.name)T+=tile('amber','exam','',String(dd),`Thi ${esc(data.exam.name)}`,dd?`Còn ${dd} ngày · luyện 1 đề`:'Hôm nay thi! Ôn 1 đề');
   else T+=tile('amber','blitz','','60','Thử thách 60 giây',`Kỷ lục: ${data.bestBlitz} câu`);
-  T+=tile('dark','mix','',I.mix,'Ôn tập',`10 câu trộn lớp ${data.grade}`);
-  return vTop()+`<div class="main">${vHero()}<div class="todayh"><h2>Hôm nay của ${esc(data.name)}</h2><button class="link" data-act="route">Lộ trình ›</button></div><div class="tiles">${T}</div></div>`;
+  return vTop()+`<div class="main">${vHero()}<button class="dtbig" data-act="colhub"><span class="dtmini" aria-hidden="true"><b>&nbsp;&nbsp;57</b><b><i>+</i>&nbsp;28</b><u></u><b class="q">&nbsp;&nbsp;??</b></span><span class="dtt"><b>Đặt tính rồi tính</b><small>Cộng, trừ, nhân, chia trên bảng nháp · chọn đúng dạng bài đã học</small></span><span class="dtgo">›</span></button><div class="todayh"><h2>Hôm nay của ${esc(data.name)}</h2><button class="link" data-act="route">Lộ trình ›</button></div><div class="tiles">${T}</div></div>`;
 }
 function vRouteView(){
   const g=G();let have=0,max=0;g.chap.forEach(c=>c.tp.forEach(t=>{have+=data.prog[t.id]||0;max+=3}));
@@ -1224,13 +1261,20 @@ function vRouteView(){
    <section class="chapc"><h3><em>Chủ đề ${S.rch+1} / ${g.chap.length}</em>${c.t}</h3>${c.tp.map(t=>`<button class="trow" data-act="topic" data-arg="${t.id}"><span>${fr(t.t)}</span>${starStr(data.prog[t.id]||0)}</button>`).join('')}</section>
   </div><div class="foot"><div class="row2"><button class="btn sec2" data-act="rch" data-arg="${S.rch-1}" ${S.rch?'':'disabled'}>‹ Chủ đề trước</button><button class="btn sec2" data-act="rch" data-arg="${S.rch+1}" ${S.rch<g.chap.length-1?'':'disabled'}>Chủ đề sau ›</button></div></div>`;
 }
+function vColHub(){
+  const g=G(),L=COL[g.n],oc={'+':'o1','−':'o2','×':'o3',':':'o4'};
+  return bar('back','Đặt tính rồi tính')+`<div class="main">
+  <div class="gpick">${[1,2,3,4,5].map(n=>`<button class="${n===data.grade?'on':''}" data-act="hubGrade" data-arg="${n}" aria-label="Lớp ${n}">${n}</button>`).join('')}</div>
+  <p class="sub" style="padding:0 2px">Lớp ${g.n}: chọn đúng dạng bài con đã học trên lớp. Mỗi lượt 5 bài trên bảng nháp.</p>
+  <div class="dthub">${L.map(t=>`<button class="dtc" data-act="colTopic" data-arg="${t.id}"><span class="op ${oc[t.op]}">${t.op}</span><span class="t">${t.t}</span>${starStr(data.prog[t.id]||0)}</button>`).join('')}</div></div>`;
+}
 function vArena(){
   const dd=examDays();
   return vTop()+`<div class="main"><h1 class="ptitle">Đấu trường<small>Kiến thức lớp ${data.grade}</small></h1>
   ${dd!==null&&data.exam.name?`<div class="banner"><span class="num">${dd}</span><span><b>Còn ${dd} ngày thi ${esc(data.exam.name)}</b><span class="sub">${new Date(data.exam.date+'T00:00:00').toLocaleDateString('vi-VN')}</span></span></div>`:''}
   <button class="card mode" data-act="exam"><span class="ti t-ink">${I.doc}</span><span><b>Đề luyện thi</b><small>20 câu · 30 phút${data.bestExam!==null?` · Cao nhất ${data.bestExam}/20`:''}</small></span></button>
   <button class="card mode" data-act="blitz"><span class="ti t-sun">${I.bolt}</span><span><b>Thử thách 60 giây</b><small>Kỷ lục: ${data.bestBlitz} câu đúng</small></span></button>
-  <button class="card mode" data-act="colMix"><span class="ti t-brand">${I.doc}</span><span><b>Đặt tính rồi tính</b><small>Cộng, trừ, nhân, chia trên bảng nháp</small></span></button>
+  <button class="card mode" data-act="colhub"><span class="ti t-brand">${I.doc}</span><span><b>Đặt tính rồi tính</b><small>Chọn dạng bài: cộng, trừ, nhân, chia</small></span></button>
   <button class="card mode" data-act="fillMix"><span class="ti t-mist">${I.pencil}</span><span><b>Giải toán có lời văn</b><small>5 bài điền bài giải</small></span></button>
   <button class="card mode" data-act="mix"><span class="ti t-brand">${I.mix}</span><span><b>Ôn tập tổng hợp</b><small>10 câu, có giải thích</small></span></button>
   <div class="card"><h3>Đổi lớp</h3><div class="gpick">${[1,2,3,4,5].map(n=>`<button class="${n===data.grade?'on':''}" style="--gc:var(${GRADES[n-1].c})" data-act="setGrade" data-arg="${n}">${n}</button>`).join('')}</div></div></div>`;
@@ -1325,9 +1369,11 @@ function vQuiz(){
   const prog=done=>head(`<div class="prog"><i style="width:${(Z.i+(done?1:0))/Z.qs.length*100}%"></i></div>`,`<span class="meta">${Z.i+1}/${Z.qs.length} · ✓ ${Z.score}</span>`);
   if(Z.kind==='col'){
     if(!Z.cv)Z.cv={v:{},sel:q.col.order[0],main:q.col.order[0]};const cv=Z.cv,done=!!cv.mk;
-    return wrap(prog(done)+`<div class="main"><div class="qcard sm" style="flex:none"><div class="qtag">Đặt tính rồi tính</div><div class="qtext" style="font-size:22px;font-family:var(--f-ui)">${q.expr}</div></div>${vColBoard(q,cv)}</div>`+
-    (done?`<div class="foot" style="height:120px"></div>`+fbSheet(cv.ok,cv.ok?pick(['Chính xác!','Giỏi quá!','Tính rất chuẩn!']):'Còn ô chưa đúng',`${cv.ok?'':`<p>Ô đỏ là chỗ cần sửa. Kết quả đúng: <strong>${q.a}</strong></p>`}<p>${q.e}</p>`,nextLbl).replace('class="fbs ','class="fbs min ').replace('>Thu gọn<','>Xem lời giải<')
-    :`<div class="foot">${padHtml()}<button class="btn" data-act="ccheck">Kiểm tra</button></div>`));
+    const head=`<div class="qcard sm" style="flex:none"><div class="qtag">${fr(Z.title)}</div><div class="qtext" style="font-size:22px;font-family:var(--f-ui)">${q.expr}</div></div>`;
+    if(!done)return wrap(prog(false)+`<div class="main">${head}${vColBoard(q,cv)}</div><div class="foot">${padHtml()}<button class="btn" data-act="ccheck">Kiểm tra</button></div>`);
+    const ttl=cv.ok?pick(['Chính xác!','Giỏi quá!','Tính rất chuẩn!']):'Còn ô chưa đúng';
+    const ex=`<div class="colex ${cv.ok?'ok':'bad'}" role="status"><div class="fbh"><span class="fbi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">${cv.ok?'<path d="M5 12.5l4.5 4.5L19 7.5"/>':'<path d="M7 7l10 10M17 7L7 17"/>'}</svg></span><b>${ttl}</b><span class="owl" aria-hidden="true">${mascot({stage:Math.max(2,data.stage),wear:{}})}</span></div>${cv.ok?'':`<p>Ô đỏ là chỗ cần sửa. Kết quả đúng: <strong>${q.a}</strong></p>`}<p>${q.e}</p></div>`;
+    return wrap(prog(true)+`<div class="main">${vColBoard(q,cv)}${ex}</div><div class="foot"><button class="btn" data-act="next" id="nextBtn">${nextLbl}</button></div>`);
   }
   if(Z.kind==='fill'){
     const fv=Z.fv;
@@ -1348,7 +1394,7 @@ function vResult(){
   <div class="rewards"><span>+${r.correct+r.bonus} ★</span>${r.meal?`<span>+1 bữa cho ${esc(data.pet)}</span>`:''}${r.evolved?`<span>${esc(data.pet)} đã lớn: ${STAGE[data.stage]}!</span>`:''}${r.newStk.map(s=>`<span>Sticker mới: ${s[2]}</span>`).join('')}</div>
   ${r.timeout?'<p class="sub">Hết giờ, bài đã được nộp tự động.</p>':''}
   ${!r.meal&&r.kind!=='blitz'?`<p class="sub">Đúng từ 80% để cho ${esc(data.pet)} ăn 1 bữa nhé.</p>`:''}</section></div>
-  <div class="foot">${r.wrong.length?`<button class="btn sec2" data-act="review">Xem lại ${r.wrong.length} câu sai</button>`:''}<div class="row2"><button class="btn sec2" data-act="home">${toHoc?'Về trang Học':'Về Đấu trường'}</button><button class="btn" data-act="retry">Làm lại</button></div></div>`;
+  <div class="foot">${r.wrong.length?`<button class="btn sec2" data-act="review">Xem lại ${r.wrong.length} câu sai</button>`:''}<div class="row2"><button class="btn sec2" data-act="home">${r.kind==='col'?'Chọn dạng khác':toHoc?'Về trang Học':'Về Đấu trường'}</button><button class="btn" data-act="retry">Làm lại</button></div></div>`;
 }
 function vReview(){
   const r=S.res,n=r.wrong.length,w=r.wrong[S.rv];
@@ -1378,7 +1424,7 @@ function gradeFill(q){
   return {v,mk,ok};
 }
 function vColBoard(q,cv){
-  const L=q.col,cw=Math.max(26,Math.min(42,Math.floor(300/L.cols))),rh=Math.round(cw*1.12),fs=Math.round(cw*.66),done=!!cv.mk;
+  const L=q.col,cw=Math.max(24,Math.min(cv.mk?34:42,Math.floor(300/L.cols))),rh=Math.round(cw*1.12),fs=Math.round(cw*.66),done=!!cv.mk;
   const pos=(c,r,w=1,h=1)=>`left:${(c*cw).toFixed(1)}px;top:${(r*rh).toFixed(1)}px;width:${(w*cw).toFixed(1)}px;height:${(h*rh).toFixed(1)}px;font-size:${fs}px`;
   let h='';
   if(L.cells.some(c=>c.t==='k'))h+=`<span class="klab" style="top:${rh*.05}px">nhớ</span>`;
@@ -1481,7 +1527,7 @@ function fx(ok,el,combo,light){
 function render(){
   applyTheme();
   const v=S.view;
-  app.innerHTML=v==='tabs'?vTabs():v==='route'?vRouteView():v==='lesson'?vLesson():v==='quiz'?vQuiz():v==='review'?vReview():vResult();
+  app.innerHTML=v==='tabs'?vTabs():v==='route'?vRouteView():v==='colhub'?vColHub():v==='lesson'?vLesson():v==='quiz'?vQuiz():v==='review'?vReview():vResult();
   layer.innerHTML=vSheet();
   const m=app.querySelector('.main');if(m)m.scrollTop=0;
   const ch=document.querySelector('#rchips .on');if(ch)ch.scrollIntoView({block:'nearest',inline:'center'});
@@ -1489,7 +1535,7 @@ function render(){
 function quitQuiz(){
   const Z=S.quiz;
   if(Z&&Z.kind!=='blitz'&&(Z.kind==='exam'||Z.i>0||Z.picked!==null)){if(Z.picked!==null&&Z.kind!=='exam'){Z.i++;Z.picked=null;Z.fv=null;Z.cv=null}if(Z.kind==='exam'||Z.i<Z.qs.length){Z.id=Z.id||Date.now();data.resume=clone(Z);save()}}
-  S.quiz=null;S.view='tabs';render();
+  S.view=Z&&Z.kind==='col'?'colhub':'tabs';S.quiz=null;render();
 }
 function onAct(act,arg,el){
   switch(act){
@@ -1516,14 +1562,16 @@ function onAct(act,arg,el){
   case 'pet':{const el2=document.getElementById('pet'),bb=document.getElementById('bubble');el2.classList.remove('hop');void el2.offsetWidth;el2.classList.add('hop');bb.textContent=pick(CHEER);break}
   case 'topic':S.topic=arg;S.ltab='note';S.view='lesson';render();break;
   case 'back':S.view='tabs';render();break;
-  case 'home':S.view='tabs';S.tab=S.res&&(S.res.kind==='topic'||(S.res.kind==='fill'||S.res.kind==='col')&&S.res.arg)?'hoc':'arena';render();break;
+  case 'home':S.view='tabs';if(S.res&&S.res.kind==='col'){S.view='colhub';render();break}S.tab=S.res&&(S.res.kind==='topic'||S.res.kind==='fill'&&S.res.arg)?'hoc':'arena';render();break;
   case 'start':startQuiz('topic',S.topic);break;
   case 'startFill':startQuiz('fill',S.topic);break;
   case 'startCol':startQuiz('col',S.topic);break;
-  case 'colMix':startQuiz('col');break;
+  case 'colhub':S.view='colhub';render();break;
+  case 'hubGrade':data.grade=+arg;save();render();break;
+  case 'colTopic':S.topic=arg;startQuiz('col',arg);break;
   case 'csel':{const cv=S.quiz.cv;if(arg[0]!=='k')cv.main=arg;colSel(arg);break}
   case 'ckey':colKey(arg==='del'||arg==='skip'?arg:+arg);break;
-  case 'ccheck':{const Z=S.quiz,q=Z.qs[Z.i],res=gradeCol(q,Z.cv);Object.assign(Z.cv,res);Z.picked=0;if(res.ok)Z.score++;else Z.wrong.push({q,p:'Đặt tính chưa đúng'});Z.combo=res.ok?(Z.combo||0)+1:0;Z.fxNow=true;render();Z.fxNow=false;fx(res.ok,document.querySelector('#fbs .fbi'),Z.combo);break}
+  case 'ccheck':{const Z=S.quiz,q=Z.qs[Z.i],res=gradeCol(q,Z.cv);Object.assign(Z.cv,res);Z.picked=0;if(res.ok)Z.score++;else Z.wrong.push({q,p:'Đặt tính chưa đúng'});Z.combo=res.ok?(Z.combo||0)+1:0;Z.fxNow=true;render();Z.fxNow=false;fx(res.ok,document.querySelector('.colex .fbi'),Z.combo);break}
   case 'fillMix':startQuiz('fill');break;
   case 'mix':startQuiz('mix');break;
   case 'exam':startQuiz('exam');break;
