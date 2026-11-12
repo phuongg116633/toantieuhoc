@@ -5,6 +5,7 @@
 - Lộ trình theo từng chủ đề SGK, có phần Ghi nhớ và ví dụ
 - Câu hỏi tạo ngẫu nhiên, có lời giải từng bước
 - Toán có lời văn dạng điền bài giải (điền số, chọn phép tính, ghi đáp số và đơn vị)
+- Đặt tính rồi tính cộng, trừ, nhân, chia trên bảng nháp ô li, có bàn phím số riêng
 - Nuôi bạn cú, đổi bạn đồng hành, vòng quay, sticker
 - Đấu trường: đề luyện thi 30 phút, thử thách 60 giây
 - Trang phụ huynh: thống kê, cài đặt kỳ thi
